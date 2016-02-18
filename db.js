@@ -1,0 +1,1 @@
+USCrimeData = new Mongo.Collection('states');
