@@ -1,1 +1,1 @@
-USCrimeData = new Mongo.Collection('states');
+Data = new Mongo.Collection('data');
