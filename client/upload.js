@@ -23,13 +23,20 @@ Template.upload.events({
       complete( results, file ) {
 
         // Handle the upload here.
+        var dataCountBefore = Data.find().count();
         Meteor.call( 'parseUpload', results.data, dataSetId, (error, response ) => {
           if ( error ) {
             console.log( error.reason )
           } else {
             // Handle success here.
+            // dataCount variables check to see if data was added to Mongo.
             template.uploading.set( false );
-            Bert.alert( 'Uploading complete!', 'success', 'growl-top-right' );
+            var dataCountAfter = Data.find().count();
+            if (dataCountAfter > dataCountBefore) {
+              Bert.alert('Uploading complete!', 'success', 'growl-top-right' );
+            } else {
+              Bert.alert('Upload failed. Cannot load same file name twice.', 'warning', 'growl-top-right');
+            }
           }
         });
       }
