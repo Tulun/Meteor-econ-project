@@ -1,10 +1,7 @@
 Template.firstGraph.onRendered(function() {
-  var data = Data.find({ dataSetId: 'hpi'}).fetch();
 
   //define constants, height/width
-  var A = Data.findOne({ dataSetId: 'hpi'})
-  console.log(new Date(A.Time))
-  console.log(Number(A.BC_Vancouver_Index));
+
 
 
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
