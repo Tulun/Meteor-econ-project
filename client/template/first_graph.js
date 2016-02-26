@@ -1,6 +1,9 @@
 Template.firstGraph.onRendered(function() {
+  var data = Data.find({dataSetId: 'hpi'}).fetch();
 
   //define constants, height/width
+
+  console.log(d3.keys.data)
 
 
 
@@ -25,10 +28,15 @@ Template.firstGraph.onRendered(function() {
     .scale(y)
     .orient('left');
 
-  var line = d3.svg.line()
+  var color = d3.scale.category10();
+
+  var line1 = d3.svg.line()
   .x(function(d) { return x(new Date(d.Time)); })
   .y(function(d) { return y(Number(d.BC_Vancouver_Index)); })
 
+  var line2 = d3.svg.line()
+  .x(function(d) { return x(new Date(d.Time)); })
+  .y(function(d) { return y(Number(d.BC_Victoria_Index)); })
 
   
 
@@ -54,60 +62,81 @@ Template.firstGraph.onRendered(function() {
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text('Price Index');
+
+
+  // var dataGroup = d3.nest()
+  //     .key(function(d) {return d.Client;})
+  //     .entries(data);
+  // console.log(JSON.stringify(dataGroup));
   
 
   //declare a Deps.autorun block
   Deps.autorun(function(){
 
       //perform a reactive query on the collection to get an array
-      var dataset = Data.find({dataSetId: 'hpi'}).fetch();
+      var dataset1 = Data.find({dataSetId: 'hpi'},
+       {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
 
-      var paths = svg.selectAll('path.line')
-        .data([dataset]);
+      var dataset2 = Data.find({dataSetId: 'hpi'},
+       {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
+
+      var path1 = svg.selectAll('path.line')
+        .data([dataset1]);
+
+      var path2 = svg.selectAll('path.line')
+        .data([dataset2]);
 
 
 
-      //update scale domains and axises
-      // var w = 600;
-      // var h = 300;
 
-      // var xscale = d3.scale.ordinal()
-      //   .rangeRoundBands([0,w], 0.05);
-      // var yscale = d3.scale.linear()
-      //   .range([0,h]);
+      // color.domain(d3.keys(dataset[0]).filter(function(key) { return key != "BC_Vancouver_Index" || "BC_Victoria_Index"; }));
       
-      x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
-      y.domain(d3.extent(dataset, function(d) { return Number(d.BC_Vancouver_Index); }));
-
-      // //Define key function, to be used when binding data
-      // var key = function(d) {
-      //     return d._id;
-      // };
+      x.domain(d3.extent(dataset1, function(d) { return new Date(d.Time); }));
+      y.domain(d3.extent(dataset1, function(d) { return Number(d.BC_Vancouver_Index); }));
 
       svg.select(".x.axis")
-      .transition()
-      .duration(1000)
-      .call(xAxis);
+        .transition()
+        .duration(1000)
+        .call(xAxis);
 
       svg.select(".y.axis")
-      .transition()
-      .duration(1000)
-      .call(yAxis);
+        .transition()
+        .duration(1000)
+        .call(yAxis);
 
       //select elements that correspond to documents
 
       //handle new documents via enter()
-      paths.enter()
+      path1.enter()
         .append('path')
-        .attr('d', line);
+        .attr('d', line1);
+
+      path2.enter()
+        .append('path')
+        .attr('d', line2);
              
 
       //handle updates to documents via transition()
-      paths.transition()
-      
+      path1.transition()
+        .duration(1000)
+        .attr('d', line1)
+        .attr('stroke', 'red')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+      path2.transition()
+        .duration(1000)
+        .attr('d', line2)
+        .attr('stroke', 'steelblue')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
 
       //handle removed documents via exit()
-      paths.exit()
+      path1.exit()
+          .remove();
+
+      path2.exit()
           .remove();
   });
 });
