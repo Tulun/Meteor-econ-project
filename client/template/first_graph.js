@@ -1,142 +1,185 @@
 Template.firstGraph.onRendered(function() {
-  var data = Data.find({dataSetId: 'hpi'}).fetch();
+  Meteor.call('myData', function(err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      var data = Data.find({dataSetId: 'hpi'}).fetch();
 
-  //define constants, height/width
+      //define constants, height/width
 
-  console.log(d3.keys.data)
-
-
-
-  var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 800 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
-
-  //define scales and axes
-
-  var x = d3.time.scale()
-    .range([0, width]);
-
-  var y = d3.scale.linear()
-    .range([height, 0]);
-  
-  var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient('bottom');
-
-  var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient('left');
-
-  var color = d3.scale.category10();
-
-  var line1 = d3.svg.line()
-  .x(function(d) { return x(new Date(d.Time)); })
-  .y(function(d) { return y(Number(d.BC_Vancouver_Index)); })
-
-  var line2 = d3.svg.line()
-  .x(function(d) { return x(new Date(d.Time)); })
-  .y(function(d) { return y(Number(d.BC_Victoria_Index)); })
-
-  
-
-  //define key function to bind elements to documents
-  
-
-  //define the SVG element by selecting the SVG via its id attribute
-  var svg = d3.select("#first_graph")
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")");
-
-  svg.append("g")
-    .attr("class", "y axis")
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text('Price Index');
-
-
-  // var dataGroup = d3.nest()
-  //     .key(function(d) {return d.Client;})
-  //     .entries(data);
-  // console.log(JSON.stringify(dataGroup));
-  
-
-  //declare a Deps.autorun block
-  Deps.autorun(function(){
-
-      //perform a reactive query on the collection to get an array
-      var dataset1 = Data.find({dataSetId: 'hpi'},
-       {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
-
-      var dataset2 = Data.find({dataSetId: 'hpi'},
-       {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
-
-      var path1 = svg.selectAll('path.line')
-        .data([dataset1]);
-
-      var path2 = svg.selectAll('path.line')
-        .data([dataset2]);
+      console.log(d3.keys.data)
 
 
 
+      var margin = {top: 20, right: 20, bottom: 30, left: 50},
+        width = 800 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
-      // color.domain(d3.keys(dataset[0]).filter(function(key) { return key != "BC_Vancouver_Index" || "BC_Victoria_Index"; }));
+
+      //define scales and axes
+
+      var x = d3.time.scale()
+        .range([0, width]);
+
+      var y = d3.scale.linear()
+        .range([height, 0]);
       
-      x.domain(d3.extent(dataset1, function(d) { return new Date(d.Time); }));
-      y.domain(d3.extent(dataset1, function(d) { return Number(d.BC_Vancouver_Index); }));
+      var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom');
 
-      svg.select(".x.axis")
-        .transition()
-        .duration(1000)
-        .call(xAxis);
+      var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left');
 
-      svg.select(".y.axis")
-        .transition()
-        .duration(1000)
-        .call(yAxis);
+      var color = d3.scale.category10();
 
-      //select elements that correspond to documents
+      var line1 = d3.svg.line()
+      .x(function(d) { return x(new Date(d.Time)); })
+      .y(function(d) { return y(Number(d.BC_Vancouver_Index)); })
 
-      //handle new documents via enter()
-      path1.enter()
-        .append('path')
-        .attr('d', line1);
+      var line2 = d3.svg.line()
+      .x(function(d) { return x(new Date(d.Time)); })
+      .y(function(d) { return y(Number(d.BC_Victoria_Index)); })
 
-      path2.enter()
-        .append('path')
-        .attr('d', line2);
-             
+      
 
-      //handle updates to documents via transition()
-      path1.transition()
-        .duration(1000)
-        .attr('d', line1)
-        .attr('stroke', 'red')
-        .attr('stroke-width', 2)
-        .attr('fill', 'none');
+      //define key function to bind elements to documents
+      
 
-      path2.transition()
-        .duration(1000)
-        .attr('d', line2)
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 2)
-        .attr('fill', 'none');
+      //define the SVG element by selecting the SVG via its id attribute
+      var svg = d3.select("#first_graph")
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")");
+
+      svg.append("g")
+        .attr("class", "y axis")
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text('Price Index');
 
 
-      //handle removed documents via exit()
-      path1.exit()
-          .remove();
+      // var dataGroup = d3.nest()
+      //     .key(function(d) {return d.Client;})
+      //     .entries(data);
+      // console.log(JSON.stringify(dataGroup));
+      
 
-      path2.exit()
-          .remove();
+      //declare a Deps.autorun block
+      Deps.autorun(function(){
+
+          //perform a reactive query on the collection to get an array
+          var dataset1 = Data.find({dataSetId: 'hpi'},
+           {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
+
+
+          var dataset2 = Data.find({dataSetId: 'hpi'},
+           {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
+
+          var datasets = {
+            data1: Data.find({dataSetId: 'hpi'},
+           {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch(),
+            data2: Data.find({dataSetId: 'hpi'},
+           {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch()
+          }
+
+          // var dat = for (var datasets in dataset) {
+          //   for (var data in dataset) {
+          //     console.log(data)
+          //   }
+          // }
+
+          var path1 = svg.selectAll('path.line')
+            .data([dataset1]);
+
+          var path2 = svg.selectAll('path.line')
+            .data([dataset2]);
+
+
+
+
+          // color.domain(d3.keys(dataset[0]).filter(function(key) { return key != "BC_Vancouver_Index" || "BC_Victoria_Index"; }));
+          
+          x.domain(d3.extent(dataset1, function(d) { return new Date(d.Time); }));
+          y.domain(d3.extent(dataset1, function(d) { return Number(d.BC_Vancouver_Index); }));
+
+          svg.select(".x.axis")
+            .transition()
+            .duration(1000)
+            .call(xAxis);
+
+          svg.select(".y.axis")
+            .transition()
+            .duration(1000)
+            .call(yAxis);
+
+          // svg.append("text")
+          //   .attr("transform", "translate(" + (width+3) + "," + Number(y(dataset1[dataset1.length - 1].BC_Vancouver_Index)) + ")")
+          //   .attr("dy", ".35em")
+          //   .style("fill", "red")
+          //   .text("Vancouver");
+
+          // svg.append("text")
+          //   .attr("transform", "translate(" + (width+3) + "," + Number(y(dataset2[dataset2.length - 1].BC_Victoria_Index)) + ")")
+          //   .attr("dy", ".35em")
+          //   .style("fill", "steelblue")
+          //   .text("Victoria");
+
+          //select elements that correspond to documents
+
+          //handle new documents via enter()
+          path1.enter()
+            .append('path')
+            .attr('d', line1)
+            .append('text')
+            .attr("dy", ".35em")
+            .attr("text-anchor", "start")
+            .style("fill", "red")
+            .text("Vancouver");
+
+          path2.enter()
+            .append('path')
+            .attr('d', line2)
+            .append('text')
+            .attr("dy", ".35em")
+            .attr("text-anchor", "start")
+            .style("fill", "steelblue")
+            .text("Victoria");
+
+                 
+
+          //handle updates to documents via transition()
+          path1.transition()
+            .duration(1000)
+            .attr('d', line1)
+            .attr('stroke', 'red')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
+
+          path2.transition()
+            .duration(1000)
+            .attr('d', line2)
+            .attr('stroke', 'steelblue')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
+
+
+          //handle removed documents via exit()
+          path1.exit()
+              .remove();
+
+          path2.exit()
+              .remove();
+      });
+    }
   });
 });

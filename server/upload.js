@@ -15,5 +15,9 @@ Meteor.methods({
     } else {
       console.warn('Rejected. This file has already been uploaded.')
     }
+  },
+
+  'myData': function() {
+    return Data.find().fetch()
   }
 });
