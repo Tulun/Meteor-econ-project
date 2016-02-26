@@ -92,11 +92,6 @@ Template.firstGraph.onRendered(function() {
            {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch()
           }
 
-          // var dat = for (var datasets in dataset) {
-          //   for (var data in dataset) {
-          //     console.log(data)
-          //   }
-          // }
 
           var path1 = svg.selectAll('path.line')
             .data([dataset1]);
@@ -122,17 +117,17 @@ Template.firstGraph.onRendered(function() {
             .duration(1000)
             .call(yAxis);
 
-          // svg.append("text")
-          //   .attr("transform", "translate(" + (width+3) + "," + Number(y(dataset1[dataset1.length - 1].BC_Vancouver_Index)) + ")")
-          //   .attr("dy", ".35em")
-          //   .style("fill", "red")
-          //   .text("Vancouver");
+          svg.append("text")
+            .attr("transform", "translate(" + (width-75) + "," + Number(y(dataset1[dataset1.length - 1].BC_Vancouver_Index)) + ")")
+            .attr("dy", ".35em")
+            .style("fill", "red")
+            .text("Vancouver");
 
-          // svg.append("text")
-          //   .attr("transform", "translate(" + (width+3) + "," + Number(y(dataset2[dataset2.length - 1].BC_Victoria_Index)) + ")")
-          //   .attr("dy", ".35em")
-          //   .style("fill", "steelblue")
-          //   .text("Victoria");
+          svg.append("text")
+            .attr("transform", "translate(" + (width-50) + "," + Number(y(dataset2[dataset2.length - 1].BC_Victoria_Index)) + ")")
+            .attr("dy", ".35em")
+            .style("fill", "steelblue")
+            .text("Victoria");
 
           //select elements that correspond to documents
 
