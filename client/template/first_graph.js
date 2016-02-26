@@ -8,7 +8,7 @@ Template.firstGraph.onRendered(function() {
 
 
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 1200 - margin.left - margin.right,
+    width = 800 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
 
@@ -47,9 +47,7 @@ Template.firstGraph.onRendered(function() {
 
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .append('text')
-    .text('Month/Year');
+    .attr("transform", "translate(0," + height + ")");
 
   svg.append("g")
     .attr("class", "y axis")
