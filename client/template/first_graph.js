@@ -8,7 +8,7 @@ Template.firstGraph.onRendered(function() {
 
 
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
+    width = 1200 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
 
@@ -18,7 +18,7 @@ Template.firstGraph.onRendered(function() {
     .range([0, width]);
 
   var y = d3.scale.linear()
-    .range([0, height])
+    .range([height, 0]);
   
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -45,9 +45,11 @@ Template.firstGraph.onRendered(function() {
     .append('g')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // svg.append("g")
-  //   .attr("class", "x axis")
-  //   .attr("transform", "translate(0," + height + ")");
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .append('text')
+    .text('Month/Year');
 
   svg.append("g")
     .attr("class", "y axis")
@@ -63,7 +65,7 @@ Template.firstGraph.onRendered(function() {
   Deps.autorun(function(){
 
       //perform a reactive query on the collection to get an array
-      var dataset = Data.find({dataSetId: 'hpi'}, {limit: 3}).fetch();
+      var dataset = Data.find({dataSetId: 'hpi'}).fetch();
 
       var paths = svg.selectAll('path.line')
         .data([dataset]);
@@ -86,6 +88,16 @@ Template.firstGraph.onRendered(function() {
       // var key = function(d) {
       //     return d._id;
       // };
+
+      svg.select(".x.axis")
+      .transition()
+      .duration(1000)
+      .call(xAxis);
+
+      svg.select(".y.axis")
+      .transition()
+      .duration(1000)
+      .call(yAxis);
 
       //select elements that correspond to documents
 
