@@ -1,4 +1,5 @@
 Template.firstGraph.onRendered(function() {
+  // This callback so the chart loads properly, as well as the method in upload/server.js
   Meteor.call('myData', function(err, result) {
     if (err) {
       console.log(err)
@@ -6,9 +7,6 @@ Template.firstGraph.onRendered(function() {
       var data = Data.find({dataSetId: 'hpi'}).fetch();
 
       //define constants, height/width
-
-      console.log(d3.keys.data)
-
 
 
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
