@@ -36,7 +36,7 @@ Template.firstGraph.onRendered(function() {
 
       var line = d3.svg.line()
         .interpolate('basis')
-        .x(function(d) { return x(d.Time); })
+        .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })      
 
       //define key function to bind elements to documents
@@ -135,7 +135,14 @@ Template.firstGraph.onRendered(function() {
           city.append('path')
             .attr('class', 'line')
             .attr('d', function(d) {return line(d.values); })
-            .style()
+            .style("stroke", function(d) { return color(d.name); })
+
+          city.append("text")
+            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+            .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
+            .attr("x", -100)
+            .attr("dy", ".35em")
+            .text(function(d) { return d.name; });
 
           // city.exit().remove();
 

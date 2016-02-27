@@ -65,10 +65,10 @@ body {
 }*/
 
 .axis path,
-.axis line {
+.axis line,
+.line {
     fill: none;
-    stroke: grey;
-    stroke-width: 1;
+    stroke-width: 2;
     shape-rendering: crispEdges;
 }
 
@@ -93,4 +93,8 @@ body {
   z-index: 2;
   width: 100%;
   height: 100%;
+}
+
+.x.axis path {
+  display: none;
 }
