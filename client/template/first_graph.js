@@ -9,6 +9,8 @@ Template.firstGraph.onRendered(function() {
       //define constants, height/width
 
 
+
+
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -70,26 +72,49 @@ Template.firstGraph.onRendered(function() {
       Deps.autorun(function(){
 
           //perform a reactive query on the collection to get an array
-          var dataset1 = Data.find({dataSetId: 'hpi'},
-           {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
+          // var dataset1 = Data.find({dataSetId: 'hpi'},
+          //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
 
 
-          var dataset2 = Data.find({dataSetId: 'hpi'},
-           {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
+          // var dataset2 = Data.find({dataSetId: 'hpi'},
+          //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
-          var datasets = {
-            data1: Data.find({dataSetId: 'hpi'},
-           {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch(),
-            data2: Data.find({dataSetId: 'hpi'},
-           {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch()
-          }
+          var dataset = Data.find({dataSetId: 'hpi'}).fetch();
+
+          var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
+            if (key === "BC_Vancouver_Index") {
+              return key
+            } else { if (key === "BC_Victoria_Index") {
+                return key
+              }
+            };
+          }));
+
+          var cities = color.domain().map(function(name) {
+            return {
+              name: name,
+              values: data.map(function(d) {
+                return {Time: d.Time, Index: +d[name]};
+              })
+            };
+          });
+
+          console.log(cities)
 
 
-          var path1 = svg.selectAll('path.line')
-            .data([dataset1]);
+          // var datasets = {
+          //   data1: Data.find({dataSetId: 'hpi'},
+          //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch(),
+          //   data2: Data.find({dataSetId: 'hpi'},
+          //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch()
+          // }
 
-          var path2 = svg.selectAll('path.line')
-            .data([dataset2]);
+
+          // var path1 = svg.selectAll('path.line')
+          //   .data([dataset1]);
+
+          // var path2 = svg.selectAll('path.line')
+          //   .data([dataset2]);
 
 
 
