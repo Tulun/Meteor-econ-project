@@ -9,6 +9,7 @@ body {
 
 .jumbotron #header {
   margin-top: -50px;
+  z-index: 2;
 }
 
 .jumbotron #index {
@@ -19,6 +20,7 @@ body {
   color: white;
   text-shadow: 2px 2px black;
   margin-top: 20px;
+  text-align: center;
 }
 
 
@@ -39,7 +41,7 @@ body {
 
 #index {
   position: relative;
-  background: no-repeat url('wall_street_1920.jpg') 50% / 100%;
+  background: no-repeat url('index.jpg') 50% / 100%;
 }
 #index > img {
   padding-top: -60px;
