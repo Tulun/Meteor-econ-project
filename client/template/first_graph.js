@@ -64,12 +64,6 @@ Template.firstGraph.onRendered(function() {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text('Price Index');
-
-
-      // var dataGroup = d3.nest()
-      //     .key(function(d) {return d.Client;})
-      //     .entries(data);
-      // console.log(JSON.stringify(dataGroup));
       
 
       //declare a Deps.autorun block

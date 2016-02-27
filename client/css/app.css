@@ -1,9 +1,24 @@
 /* CSS declarations go here */
+body {
+  background-color: white;
+}
+.jumbotron { 
+  font: 12px Arial;
+  background-color: white;
+}
 
-body { font: 12px Arial;}
+.jumbotron #header {
+  margin-top: -50px;
+}
 
-h1, h3 {
+.jumbotron #index {
+
+}
+
+#index > h1, h3 {
   color: white;
+  text-shadow: 2px 2px black;
+  margin-top: 20px;
 }
 
 
@@ -23,4 +38,23 @@ h1, h3 {
 }
 
 #index {
+  position: relative;
+  background: no-repeat url('wall_street_1920.jpg') 50% / 100%;
+}
+#index > img {
+  padding-top: -60px;
+  margin-top: -150px;
+  vertical-align: top;
+  width: 100%; /* max width */
+  opacity: 0;  /* make it transparent */
+}
+
+#index > div {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  float: bottom;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
 }
