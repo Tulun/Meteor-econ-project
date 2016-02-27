@@ -36,7 +36,7 @@ Template.firstGraph.onRendered(function() {
 
       var line = d3.svg.line()
         .interpolate('basis')
-        .x(function(d) { return x(d.date); })
+        .x(function(d) { return x(d.Time); })
         .y(function(d) { return y(d.Index); })      
 
       //define key function to bind elements to documents
@@ -128,6 +128,17 @@ Template.firstGraph.onRendered(function() {
           var city = svg.selectAll('.city')
             .data(cities)
             .enter();
+
+          city.append('g')
+            .attr('class', 'city');
+
+          city.append('path')
+            .attr('class', 'line')
+            .attr('d', function(d) {return line(d.values); })
+            .style()
+
+          // city.exit().remove();
+
 
           // svg.select(".x.axis")
           //   .transition()
