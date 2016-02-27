@@ -1,10 +1,13 @@
 <template name='upload'>
-  <h4 class='page-header'>Upload a CSV</h4>
-  <h5> Note: You cannot load the same file name twice into the database. </h5>
+  <div class='container-fluid'>
+    <h4 class='page-header'>Upload a CSV</h4>
+    <p class='text'> You are able to upload csv files into the database, which will create an id based on the filename.</p>
+    <p class='text note'> Note: You cannot load the same file name twice into the database. </p>
 
-  {{#unless uploading}}
-    <input type='file' name='uploadCSV'>
-  {{else}}
-  <p><i class='fa fa-spin fa-refresh'></i> Uploading files...</p>
-  {{/unless}}
+    {{#unless uploading}}
+      <input type='file' name='uploadCSV' id='file_upload'>
+    {{else}}
+    <p><i class='fa fa-spin fa-refresh'></i> Uploading files...</p>
+    {{/unless}}
+  </div>
 </template>

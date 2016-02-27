@@ -1,10 +1,10 @@
 /* CSS declarations go here */
 body {
-  background-color: white;
+  background: #eee;
 }
 .jumbotron { 
   font: 12px Arial;
-  background-color: white;
+  background: #eee;
 }
 
 .jumbotron #header {
@@ -14,11 +14,46 @@ body {
   margin-top: -10px;
 }
 
+.jumbotron .not-found {
+  text-align: center;
+}
+
 #index > h1, h3 {
   color: white;
   text-shadow: 2px 2px black;
   margin-top: 20px;
   text-align: center;
+}
+
+#spinner {
+  height: 300px; 
+}
+
+#file_upload {
+  text-shadow: 1px black;
+}
+
+.page-header {
+  color: #7c795d;
+  font-family: 'Trocchi', serif;
+  font-size: 27px;
+  font-weight: normal;
+  line-height: 48px;
+  margin: 0;
+  text-decoration: underline;
+}
+
+.text {
+  color: #4c4a37;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 18px;
+  line-height: 32px;
+  margin: 0 0 24px;
+}
+
+.note.text {
+  font-weight: bold;
+  font-size: 15px;
 }
 
 
@@ -41,6 +76,7 @@ body {
   position: relative;
   background: no-repeat url('index.jpg') 50% / 100%;
 }
+
 #index > img {
   padding-top: -60px;
   margin-top: -150px;
