@@ -8,12 +8,10 @@ body {
 }
 
 .jumbotron #header {
-  margin-top: -50px;
-  z-index: 2;
 }
 
 .jumbotron #index {
-
+  margin-top: -10px;
 }
 
 #index > h1, h3 {
