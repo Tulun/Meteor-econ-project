@@ -34,15 +34,10 @@ Template.firstGraph.onRendered(function() {
 
       var color = d3.scale.category10();
 
-      var line1 = d3.svg.line()
-      .x(function(d) { return x(new Date(d.Time)); })
-      .y(function(d) { return y(Number(d.BC_Vancouver_Index)); })
-
-      var line2 = d3.svg.line()
-      .x(function(d) { return x(new Date(d.Time)); })
-      .y(function(d) { return y(Number(d.BC_Victoria_Index)); })
-
-      
+      var line = d3.svg.line()
+        .interpolate('basis')
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.Index); })      
 
       //define key function to bind elements to documents
       
@@ -102,23 +97,6 @@ Template.firstGraph.onRendered(function() {
           console.log(cities)
 
 
-          // var datasets = {
-          //   data1: Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch(),
-          //   data2: Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch()
-          // }
-
-
-          // var path1 = svg.selectAll('path.line')
-          //   .data([dataset1]);
-
-          // var path2 = svg.selectAll('path.line')
-          //   .data([dataset2]);
-
-
-
-
           // color.domain(d3.keys(dataset[0]).filter(function(key) { return key != "BC_Vancouver_Index" || "BC_Victoria_Index"; }));
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
@@ -127,73 +105,93 @@ Template.firstGraph.onRendered(function() {
             d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.Index; }); })
           ]);
 
-          svg.select(".x.axis")
-            .transition()
-            .duration(1000)
-            .call(xAxis);
-
-          svg.select(".y.axis")
-            .transition()
-            .duration(1000)
-            .call(yAxis);
-
-          svg.append("text")
-            .attr("transform", "translate(" + (width-75) + "," + Number(y(dataset1[dataset1.length - 1].BC_Vancouver_Index)) + ")")
-            .attr("dy", ".35em")
-            .style("fill", "red")
-            .text("Vancouver");
-
-          svg.append("text")
-            .attr("transform", "translate(" + (width-50) + "," + Number(y(dataset2[dataset2.length - 1].BC_Victoria_Index)) + ")")
-            .attr("dy", ".35em")
-            .style("fill", "steelblue")
-            .text("Victoria");
-
-          //select elements that correspond to documents
-
-          //handle new documents via enter()
-          path1.enter()
-            .append('path')
-            .attr('d', line1)
+          svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
             .append('text')
-            .attr("dy", ".35em")
-            .attr("text-anchor", "start")
-            .style("fill", "red")
-            .text("Vancouver");
+            .attr('x', 6)
+            .attr('y', 18)
+            .style('text-anchor', 'middle')
+            .text('Year');
 
-          path2.enter()
-            .append('path')
-            .attr('d', line2)
-            .append('text')
-            .attr("dy", ".35em")
-            .attr("text-anchor", "start")
-            .style("fill", "steelblue")
-            .text("Victoria");
+          svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Price Index");
+
+          // svg.select(".x.axis")
+          //   .transition()
+          //   .duration(1000)
+          //   .call(xAxis);
+
+          // svg.select(".y.axis")
+          //   .transition()
+          //   .duration(1000)
+          //   .call(yAxis);
+
+          // svg.append("text")
+          //   .attr("transform", "translate(" + (width-75) + "," + Number(y(dataset1[dataset1.length - 1].BC_Vancouver_Index)) + ")")
+          //   .attr("dy", ".35em")
+          //   .style("fill", "red")
+          //   .text("Vancouver");
+
+          // svg.append("text")
+          //   .attr("transform", "translate(" + (width-50) + "," + Number(y(dataset2[dataset2.length - 1].BC_Victoria_Index)) + ")")
+          //   .attr("dy", ".35em")
+          //   .style("fill", "steelblue")
+          //   .text("Victoria");
+
+          // //select elements that correspond to documents
+
+          // //handle new documents via enter()
+          // path1.enter()
+          //   .append('path')
+          //   .attr('d', line1)
+          //   .append('text')
+          //   .attr("dy", ".35em")
+          //   .attr("text-anchor", "start")
+          //   .style("fill", "red")
+          //   .text("Vancouver");
+
+          // path2.enter()
+          //   .append('path')
+          //   .attr('d', line2)
+          //   .append('text')
+          //   .attr("dy", ".35em")
+          //   .attr("text-anchor", "start")
+          //   .style("fill", "steelblue")
+          //   .text("Victoria");
 
                  
 
-          //handle updates to documents via transition()
-          path1.transition()
-            .duration(1000)
-            .attr('d', line1)
-            .attr('stroke', 'red')
-            .attr('stroke-width', 2)
-            .attr('fill', 'none');
+          // //handle updates to documents via transition()
+          // path1.transition()
+          //   .duration(1000)
+          //   .attr('d', line1)
+          //   .attr('stroke', 'red')
+          //   .attr('stroke-width', 2)
+          //   .attr('fill', 'none');
 
-          path2.transition()
-            .duration(1000)
-            .attr('d', line2)
-            .attr('stroke', 'steelblue')
-            .attr('stroke-width', 2)
-            .attr('fill', 'none');
+          // path2.transition()
+          //   .duration(1000)
+          //   .attr('d', line2)
+          //   .attr('stroke', 'steelblue')
+          //   .attr('stroke-width', 2)
+          //   .attr('fill', 'none');
 
 
-          //handle removed documents via exit()
-          path1.exit()
-              .remove();
+          // //handle removed documents via exit()
+          // path1.exit()
+          //     .remove();
 
-          path2.exit()
-              .remove();
+          // path2.exit()
+          //     .remove();
       });
     }
   });
