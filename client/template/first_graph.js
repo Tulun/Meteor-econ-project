@@ -125,6 +125,10 @@ Template.firstGraph.onRendered(function() {
             .style("text-anchor", "end")
             .text("Price Index");
 
+          var city = svg.selectAll('.city')
+            .data(cities)
+            .enter();
+
           // svg.select(".x.axis")
           //   .transition()
           //   .duration(1000)
