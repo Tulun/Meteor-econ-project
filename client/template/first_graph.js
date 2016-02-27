@@ -79,10 +79,11 @@ Template.firstGraph.onRendered(function() {
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
             if (key === "BC_Vancouver_Index") {
               return key
-            } else { if (key === "BC_Victoria_Index") {
+            } else if (key === "BC_Victoria_Index") {
                 return key
-              }
-            };
+              } else if (key === 'AB_Edmonton_Index') {
+                  return key
+                }
           }));
 
           var cities = color.domain().map(function(name) {
@@ -144,76 +145,7 @@ Template.firstGraph.onRendered(function() {
             .attr("dy", ".35em")
             .text(function(d) { return d.name; });
 
-          // city.exit().remove();
 
-
-          // svg.select(".x.axis")
-          //   .transition()
-          //   .duration(1000)
-          //   .call(xAxis);
-
-          // svg.select(".y.axis")
-          //   .transition()
-          //   .duration(1000)
-          //   .call(yAxis);
-
-          // svg.append("text")
-          //   .attr("transform", "translate(" + (width-75) + "," + Number(y(dataset1[dataset1.length - 1].BC_Vancouver_Index)) + ")")
-          //   .attr("dy", ".35em")
-          //   .style("fill", "red")
-          //   .text("Vancouver");
-
-          // svg.append("text")
-          //   .attr("transform", "translate(" + (width-50) + "," + Number(y(dataset2[dataset2.length - 1].BC_Victoria_Index)) + ")")
-          //   .attr("dy", ".35em")
-          //   .style("fill", "steelblue")
-          //   .text("Victoria");
-
-          // //select elements that correspond to documents
-
-          // //handle new documents via enter()
-          // path1.enter()
-          //   .append('path')
-          //   .attr('d', line1)
-          //   .append('text')
-          //   .attr("dy", ".35em")
-          //   .attr("text-anchor", "start")
-          //   .style("fill", "red")
-          //   .text("Vancouver");
-
-          // path2.enter()
-          //   .append('path')
-          //   .attr('d', line2)
-          //   .append('text')
-          //   .attr("dy", ".35em")
-          //   .attr("text-anchor", "start")
-          //   .style("fill", "steelblue")
-          //   .text("Victoria");
-
-                 
-
-          // //handle updates to documents via transition()
-          // path1.transition()
-          //   .duration(1000)
-          //   .attr('d', line1)
-          //   .attr('stroke', 'red')
-          //   .attr('stroke-width', 2)
-          //   .attr('fill', 'none');
-
-          // path2.transition()
-          //   .duration(1000)
-          //   .attr('d', line2)
-          //   .attr('stroke', 'steelblue')
-          //   .attr('stroke-width', 2)
-          //   .attr('fill', 'none');
-
-
-          // //handle removed documents via exit()
-          // path1.exit()
-          //     .remove();
-
-          // path2.exit()
-          //     .remove();
       });
     }
   });
