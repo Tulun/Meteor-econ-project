@@ -121,8 +121,11 @@ Template.firstGraph.onRendered(function() {
 
           // color.domain(d3.keys(dataset[0]).filter(function(key) { return key != "BC_Vancouver_Index" || "BC_Victoria_Index"; }));
           
-          x.domain(d3.extent(dataset1, function(d) { return new Date(d.Time); }));
-          y.domain(d3.extent(dataset1, function(d) { return Number(d.BC_Vancouver_Index); }));
+          x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
+          y.domain([
+            d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.Index; }); }),
+            d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.Index; }); })
+          ]);
 
           svg.select(".x.axis")
             .transition()
