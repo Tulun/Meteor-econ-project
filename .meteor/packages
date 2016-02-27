@@ -25,3 +25,4 @@ reactive-var
 fortawesome:fontawesome
 check
 twbs:bootstrap
+iron:router

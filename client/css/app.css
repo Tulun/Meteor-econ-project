@@ -2,6 +2,12 @@
 
 body { font: 12px Arial;}
 
+h1, h3 {
+  color: white;
+}
+
+
+
 /*path { 
     stroke: steelblue;
     stroke-width: 2;
@@ -14,4 +20,7 @@ body { font: 12px Arial;}
     stroke: grey;
     stroke-width: 1;
     shape-rendering: crispEdges;
+}
+
+#index {
 }
