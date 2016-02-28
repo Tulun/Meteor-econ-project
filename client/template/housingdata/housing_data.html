@@ -1,10 +1,13 @@
 <template name="housingData">
-<!--   <script src='./housing_data.js'></script>
- -->  <div class='container-fluid'>
+  <div class='container-fluid'>
     <h1 class='page-header'>Canadian Housing Market Data</h1>
     <p class='text'>
       The following graph takes a look at Housing Price Index (2005 constant dollars). As we say from the graph, the Vancouver market is by far the highest, with Toronto being somewhat high. Vancouver housing prices over the last 10 years or so have almost doubled. Toronto's is high, but not nearly as high. Montreal, on the other hand, has a more reasonable housing market price.
     </p>
     <svg id=first_housing_graph></svg>
+    <p class='text'>
+      Meanwhile, prairie housing prices have shot up and stayed somewhat clustered. Edmonton and Calgary are virtually the same price, while Winnipeg has seen a large growth since ~2007.
+    </p>
+    <svg id=second_housing_graph></svg>
   </div>
 </template>

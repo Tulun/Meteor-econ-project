@@ -205,10 +205,10 @@ Template.housingData.onRendered(function() {
 
             city.exit().remove()
 
-          var points = svg.selectAll(".point")
-            .data(cities[0].values);
+          // var points = svg.selectAll(".point")
+          //   .data(cities[0].values);
 
-          console.log(points)
+          // console.log(points)
 
           // points.enter();
 
