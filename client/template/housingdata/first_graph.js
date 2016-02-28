@@ -44,7 +44,7 @@ Template.housingData.onRendered(function() {
               .attr("cy",function(d,i) { return i-0.25+"em"})
               .attr("cx",0)
               .attr("r","0.4em")
-              .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
+              .style("fill",function(d) { return d.value.color})  
           
           // Reposition and resize the box
           var lbbox = li[0][0].getBBox()  
@@ -66,7 +66,9 @@ Template.housingData.onRendered(function() {
 
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom;
+        height = 600 - margin.top - margin.bottom,
+        dotRadius = function() { return 2.5 };
+
 
 
       //define scales and axes
@@ -76,6 +78,7 @@ Template.housingData.onRendered(function() {
 
       var y = d3.scale.linear()
         .range([height, 0]);
+
       
       var xAxis = d3.svg.axis()
         .scale(x)
@@ -90,7 +93,8 @@ Template.housingData.onRendered(function() {
       var line = d3.svg.line()
         .defined(function(d) { return d.Index > 0; })
         .x(function(d) { return x(new Date(d.Time)); })
-        .y(function(d) { return y(d.Index); })      
+        .y(function(d) { return y(d.Index); })  
+
 
       //define key function to bind elements to documents
       
@@ -118,6 +122,9 @@ Template.housingData.onRendered(function() {
 
       //declare a Deps.autorun block
       Deps.autorun(function(){
+
+      // x0 = x0 || x;
+      // y0 = y0 || y;
 
           //perform a reactive query on the collection to get an array
           // var dataset1 = Data.find({dataSetId: 'hpi'},
@@ -151,8 +158,6 @@ Template.housingData.onRendered(function() {
             };
           });
 
-          console.log(cities)
-
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
           y.domain([
@@ -183,7 +188,10 @@ Template.housingData.onRendered(function() {
           var city = svg.selectAll('.city')
             .data(cities)
 
-          console.log(city)
+          console.log("City is: ", city)
+          console.log("Cities is: ", cities)
+
+
 
           city.enter()
             .append('g')
@@ -191,7 +199,7 @@ Template.housingData.onRendered(function() {
 
           city.append('path')
             .attr('class', 'line')
-            .attr('d', function(d) {return line(d.values); })
+            .attr('d', function(d) { console.log('d is: ', d); return line(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
@@ -205,21 +213,35 @@ Template.housingData.onRendered(function() {
 
             city.exit().remove()
 
-          // var points = svg.selectAll(".point")
-          //   .data(cities[0].values);
+          // var points = city.selectAll('.dot')
+          //   .data(cities);
 
-          // console.log(points)
 
-          // points.enter();
 
-          // points.append("svg:circle")
-          //  .attr("stroke", "black")
-          //  .attr("fill", function(d, i) { return "black" })
-          //  .attr("cx", function(d) { return x(new Date(d.Time)) })
-          //  .attr("cy", function(d) { return y(d.Index) })
-          //  .attr("r", function(d) { return 3 });
+          // console.log('Points is :', points)
 
+
+        
+          // points
+          //   .enter().append('circle')
+          //   .data(function(d) {console.log("data d is :", d); return d.values})
+          //   .attr('cx', function(d) {console.log(x(new Date(d.Time))); x(new Date(d.Time))})
+          //   .attr('cy', function(d) {console.log(y(d.Index)); y(d.Index)})
+          //   .attr('r', dotRadius())
+
+
+         
           // points.exit().remove();
+         
+          // // points.attr('class', function(d,i) { return 'point point-' + i });
+          
+          // d3.transition(points)
+          //   .attr('cx', function(d) { x(new Date(d.Time))})
+          //   .attr('cy', function(d) { y(d.Index)})
+          //   .attr('r', dotRadius())
+
+
+
 
           legend1 = svg.append("g")
             .attr("class","legend")

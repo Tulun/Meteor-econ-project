@@ -78,28 +78,6 @@ svg {
     fill: none;
 }*/
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 3px;
-  shape-rendering: crispEdges;
-}
-
-.line {
-  fill: none;
-  stroke-width: 1.5px;
-  stroke-linecap: round;
-
-  transition: stroke-width 250ms linear;
-  -moz-transition: stroke-width 250ms linear;
-  -webkit-transition: stroke-width 250ms linear;
-
-  transition-delay: 250ms
-  -moz-transition-delay: 250ms;
-  -webkit-transition-delay: 250ms;
-}
-
 #index {
   position: relative;
   background: no-repeat url('index.jpg') 50% / 100%;
@@ -123,20 +101,6 @@ svg {
   height: 100%;
 }
 
-.x.axis path {
-/* Uncomment below if I want to remove x-axis line */
-/*  display: none;*/
-}
-
-.overlay {
-  fill: none;
-  pointer-events: all;
-}
-
-.focus circle {
-  fill: none;
-  stroke: steelblue;
-}
 
 /* The following CSS is all for the tooltip */
 .nvtooltip {
@@ -179,4 +143,47 @@ svg {
 .nvtooltip span {
   display: inline-block;
   margin: 2px 0;
+}
+
+/* Line Chart CSS */
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+
+  transition: stroke-width 250ms linear;
+  -moz-transition: stroke-width 250ms linear;
+  -webkit-transition: stroke-width 250ms linear;
+
+  transition-delay: 250ms
+  -moz-transition-delay: 250ms;
+  -webkit-transition-delay: 250ms;
+}
+
+.line.hover path {
+  stroke-width: 6px;
+}
+
+.x.axis path {
+/* Uncomment below if I want to remove x-axis line */
+/*  display: none;*/
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
 }
