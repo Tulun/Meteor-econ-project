@@ -111,6 +111,17 @@ svg {
 }
 
 .x.axis path {
-  display: none;
+/* Uncomment below if I want to remove x-axis line */
+/*  display: none;*/
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
 }
 
