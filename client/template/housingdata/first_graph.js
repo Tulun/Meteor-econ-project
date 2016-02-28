@@ -221,14 +221,14 @@ Template.housingData.onRendered(function() {
 
           // points.exit().remove();
 
-          legend = svg.append("g")
+          legend1 = svg.append("g")
             .attr("class","legend")
             .attr("transform","translate(50,30)")
             .style("font-size","12px")
             .call(d3.legend)
 
           setTimeout(function() { 
-            legend
+            legend1
               .style("font-size","20px")
               .attr("data-style-padding",10)
               .call(d3.legend)
