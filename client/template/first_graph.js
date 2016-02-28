@@ -35,8 +35,10 @@ Template.firstGraph.onRendered(function() {
       var color = d3.scale.category10();
 
       var line = d3.svg.line()
-        .interpolate('basis')
-        .x(function(d) { return x(new Date(d.Time)); })
+        .defined(function(d) { return d.Index > 0; })
+        .x(function(d) {
+            return x(new Date(d.Time)) 
+        })
         .y(function(d) { return y(d.Index); })      
 
       //define key function to bind elements to documents
@@ -74,16 +76,18 @@ Template.firstGraph.onRendered(function() {
           // var dataset2 = Data.find({dataSetId: 'hpi'},
           //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
+          // This is entire dataset.
           var dataset = Data.find({dataSetId: 'hpi'}).fetch();
 
+          // This is a subset where there are only positive values to the Edmonton Index.
+          // var dataset = Data.find({AB_Edmonton_Index: {$ne: '0'}}).fetch()
+
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
-            if (key === "BC_Vancouver_Index") {
+            if (key === "BC_Vancouver_Index"
+             || key ==='BC_Victoria_Index'
+             || key ==='AB_Edmonton_Index') {
               return key
-            } else if (key === "BC_Victoria_Index") {
-                return key
-              } else if (key === 'AB_Edmonton_Index') {
-                  return key
-                }
+            }
           }));
 
           var cities = color.domain().map(function(name) {
@@ -98,7 +102,6 @@ Template.firstGraph.onRendered(function() {
           console.log(cities)
 
 
-          // color.domain(d3.keys(dataset[0]).filter(function(key) { return key != "BC_Vancouver_Index" || "BC_Victoria_Index"; }));
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
           y.domain([
@@ -143,8 +146,8 @@ Template.firstGraph.onRendered(function() {
             .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
             .attr("x", -100)
             .attr("dy", ".35em")
+            .style('fill', function(d) { return color(d.name); })
             .text(function(d) { return d.name; });
-
 
       });
     }
