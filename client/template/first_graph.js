@@ -36,9 +36,7 @@ Template.firstGraph.onRendered(function() {
 
       var line = d3.svg.line()
         .defined(function(d) { return d.Index > 0; })
-        .x(function(d) {
-            return x(new Date(d.Time)) 
-        })
+        .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })      
 
       //define key function to bind elements to documents
@@ -53,7 +51,7 @@ Template.firstGraph.onRendered(function() {
 
       svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")");
+        .attr("transform", "translate(0," + height + ")")
 
       svg.append("g")
         .attr("class", "y axis")
@@ -84,8 +82,8 @@ Template.firstGraph.onRendered(function() {
 
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
             if (key === "BC_Vancouver_Index"
-             || key ==='BC_Victoria_Index'
-             || key ==='AB_Edmonton_Index') {
+             || key ==='ON_Toronto_Index'
+             || key ==='QC_Montreal_Index') {
               return key
             }
           }));

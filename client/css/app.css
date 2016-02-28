@@ -67,9 +67,10 @@ body {
 .axis path,
 .axis line,
 .line {
-    fill: none;
-    stroke-width: 2;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+  shape-rendering: crispEdges;
 }
 
 #index {
@@ -98,3 +99,4 @@ body {
 .x.axis path {
   display: none;
 }
+
