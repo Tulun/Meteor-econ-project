@@ -1,9 +1,10 @@
-Template.firstGraph.onRendered(function() {
+Template.housingData.onRendered(function() {
   // This callback so the chart loads properly, as well as the method in upload/server.js
   Meteor.call('myData', function(err, result) {
     if (err) {
       console.log(err)
     } else {
+
     // This function creates a legend.
       d3.legend = function(g) {
         g.each(function() {
@@ -95,7 +96,7 @@ Template.firstGraph.onRendered(function() {
       
 
       //define the SVG element by selecting the SVG via its id attribute
-      var svg = d3.select("#first_graph")
+      var svg = d3.select("#first_housing_graph")
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
@@ -134,12 +135,13 @@ Template.firstGraph.onRendered(function() {
 
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
             if (key === 'Vancouver_HPI'
-             || key ==='Toronto_HPI'
-             || key ==='Montreal_HPI') {
+             || key === 'Toronto_HPI'
+             || key === 'Montreal_HPI') {
               return key
             }
           }));
 
+          //
           var cities = color.domain().map(function(name) {
             return {
               name: name,
@@ -150,7 +152,6 @@ Template.firstGraph.onRendered(function() {
           });
 
           console.log(cities)
-
 
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
@@ -181,9 +182,11 @@ Template.firstGraph.onRendered(function() {
 
           var city = svg.selectAll('.city')
             .data(cities)
-            .enter();
 
-          city.append('g')
+          console.log(city)
+
+          city.enter()
+            .append('g')
             .attr('class', 'city');
 
           city.append('path')
@@ -199,6 +202,24 @@ Template.firstGraph.onRendered(function() {
             .attr("dy", ".35em")
             .style('fill', function(d) { return color(d.name); })
             .text(function(d) { return d.name; });
+
+            city.exit().remove()
+
+          var points = svg.selectAll(".point")
+            .data(cities[0].values);
+
+          console.log(points)
+
+          // points.enter();
+
+          // points.append("svg:circle")
+          //  .attr("stroke", "black")
+          //  .attr("fill", function(d, i) { return "black" })
+          //  .attr("cx", function(d) { return x(new Date(d.Time)) })
+          //  .attr("cy", function(d) { return y(d.Index) })
+          //  .attr("r", function(d) { return 3 });
+
+          // points.exit().remove();
 
           legend = svg.append("g")
             .attr("class","legend")
