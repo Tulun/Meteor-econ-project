@@ -11,9 +11,9 @@ Template.firstGraph.onRendered(function() {
 
 
 
-      var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 800 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+      var margin = {top: 20, right: 150, bottom: 40, left: 50},
+        width = 1000 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
 
 
       //define scales and axes
@@ -138,11 +138,12 @@ Template.firstGraph.onRendered(function() {
             .attr('class', 'line')
             .attr('d', function(d) {return line(d.values); })
             .style("stroke", function(d) { return color(d.name); })
+            .attr("data-legend",function(d) { return d.name})
 
           city.append("text")
             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
             .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
-            .attr("x", -100)
+            .attr("x", 3)
             .attr("dy", ".35em")
             .style('fill', function(d) { return color(d.name); })
             .text(function(d) { return d.name; });

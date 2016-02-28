@@ -2,6 +2,13 @@
 body {
   background: #eee;
 }
+
+svg {
+  border: solid;
+  border-color: gray;
+  border-style: solid;
+  padding-top: -10px;
+}
 .jumbotron { 
   font: 12px Arial;
   background: #eee;
@@ -41,6 +48,7 @@ body {
   line-height: 48px;
   margin: 0;
   text-decoration: underline;
+  margin-top: 20px;
 }
 
 .text {
