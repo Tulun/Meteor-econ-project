@@ -4,7 +4,59 @@ Template.firstGraph.onRendered(function() {
     if (err) {
       console.log(err)
     } else {
+    // This function creates a legend.
+      d3.legend = function(g) {
+        g.each(function() {
+          var g= d3.select(this),
+              items = {},
+              svg = d3.select(g.property("nearestViewportElement")),
+              legendPadding = g.attr("data-style-padding") || 5,
+              lb = g.selectAll(".legend-box").data([true]),
+              li = g.selectAll(".legend-items").data([true])
+
+          lb.enter().append("rect").classed("legend-box",true)
+          li.enter().append("g").classed("legend-items",true)
+
+          svg.selectAll("[data-legend]").each(function() {
+              var self = d3.select(this)
+              items[self.attr("data-legend")] = {
+                pos : self.attr("data-legend-pos") || this.getBBox().y,
+                color : self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke") 
+              }
+            })
+
+          items = d3.entries(items).sort(function(a,b) { return a.value.pos-b.value.pos})
+
+          
+          li.selectAll("text")
+              .data(items,function(d) { return d.key})
+              .call(function(d) { d.enter().append("text")})
+              .call(function(d) { d.exit().remove()})
+              .attr("y",function(d,i) { return i+"em"})
+              .attr("x","1em")
+              .text(function(d) { ;return d.key})
+          
+          li.selectAll("circle")
+              .data(items,function(d) { return d.key})
+              .call(function(d) { d.enter().append("circle")})
+              .call(function(d) { d.exit().remove()})
+              .attr("cy",function(d,i) { return i-0.25+"em"})
+              .attr("cx",0)
+              .attr("r","0.4em")
+              .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
+          
+          // Reposition and resize the box
+          var lbbox = li[0][0].getBBox()  
+          lb.attr("x",(lbbox.x-legendPadding))
+              .attr("y",(lbbox.y-legendPadding))
+              .attr("height",(lbbox.height+2*legendPadding))
+              .attr("width",(lbbox.width+2*legendPadding))
+        })
+        return g
+      }
+      
       var data = Data.find({dataSetId: 'hpi'}).fetch();
+
 
       //define constants, height/width
 
@@ -81,9 +133,9 @@ Template.firstGraph.onRendered(function() {
           // var dataset = Data.find({AB_Edmonton_Index: {$ne: '0'}}).fetch()
 
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
-            if (key === "BC_Vancouver_Index"
-             || key ==='ON_Toronto_Index'
-             || key ==='QC_Montreal_Index') {
+            if (key === 'Vancouver_HPI'
+             || key ==='Toronto_HPI'
+             || key ==='Montreal_HPI') {
               return key
             }
           }));
@@ -137,8 +189,8 @@ Template.firstGraph.onRendered(function() {
           city.append('path')
             .attr('class', 'line')
             .attr('d', function(d) {return line(d.values); })
-            .style("stroke", function(d) { return color(d.name); })
             .attr("data-legend",function(d) { return d.name})
+            .style("stroke", function(d) { return color(d.name); })
 
           city.append("text")
             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
@@ -147,6 +199,19 @@ Template.firstGraph.onRendered(function() {
             .attr("dy", ".35em")
             .style('fill', function(d) { return color(d.name); })
             .text(function(d) { return d.name; });
+
+          legend = svg.append("g")
+            .attr("class","legend")
+            .attr("transform","translate(50,30)")
+            .style("font-size","12px")
+            .call(d3.legend)
+
+          setTimeout(function() { 
+            legend
+              .style("font-size","20px")
+              .attr("data-style-padding",10)
+              .call(d3.legend)
+          },1000)
 
       });
     }

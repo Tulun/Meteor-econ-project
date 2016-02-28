@@ -51,6 +51,12 @@ svg {
   margin-top: 20px;
 }
 
+.legend rect {
+  fill:white;
+  stroke:black;
+  opacity:0.8;
+}
+
 .text {
   color: #4c4a37;
   font-family: 'Source Sans Pro', sans-serif;
