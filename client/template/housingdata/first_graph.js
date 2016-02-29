@@ -67,7 +67,7 @@ Template.housingData.onRendered(function() {
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom,
-        dotRadius = function() { return 2.5 };
+        dotRadius = function() { return 1 };
 
 
 
@@ -213,31 +213,53 @@ Template.housingData.onRendered(function() {
 
             city.exit().remove()
 
-          // var points = city.selectAll('.dot')
-          //   .data(cities);
+          var points = svg.selectAll('.groupOfPoint')
+            .data(cities);
 
 
 
-          // console.log('Points is :', points)
+          console.log('Points is :', points)
 
 
-        
-          // points
-          //   .enter().append('circle')
-          //   .data(function(d) {console.log("data d is :", d); return d.values})
-          //   .attr('cx', function(d) {console.log(x(new Date(d.Time))); x(new Date(d.Time))})
-          //   .attr('cy', function(d) {console.log(y(d.Index)); y(d.Index)})
-          //   .attr('r', dotRadius())
+            points
+            .enter()
+            .append('g')
+            .attr('class', 'groupOfPoint');
+
+            points.selectAll('.point')
+              .data(function(d) {
+                // console.log("data is :", d.values)
+                return d.values;
+              })
+              .enter()
+              .append('circle')
+              .attr('cx', function(d) {
+                console.log("cx is: ", x(new Date(d.Time)))
+                return x(new Date(d.Time))
+              })
+              .attr('cy', function(d) {
+                return y(d.Index);
+              })
+              .attr('r', dotRadius());
 
 
          
-          // points.exit().remove();
+          points.exit().remove();
          
-          // // points.attr('class', function(d,i) { return 'point point-' + i });
+          // points.attr('class', function(d,i) { return 'point point-' + i });
           
           // d3.transition(points)
-          //   .attr('cx', function(d) { x(new Date(d.Time))})
-          //   .attr('cy', function(d) { y(d.Index)})
+          //   .attr('cx', function(d) {
+          //     return x(new Date(d.values.forEach(function(c) {
+          //       console.log("cx is: ", c.Time);
+          //       return c.Time;
+          //     })))})
+          //   .attr('cy', function(d) {
+          //     return y(d.values.forEach(function(c) {
+          //       console.log("cy is: ", c.Index)
+          //       return c.Index;
+          //     }))
+          //   })
           //   .attr('r', dotRadius())
 
 
