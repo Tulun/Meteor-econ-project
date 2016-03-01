@@ -16,8 +16,11 @@ svg {
   background: #eee;
 }
 
-.jumbotron #header {
+#header {
+  font-size: 20px;
 }
+
+
 
 .jumbotron #index {
   margin-top: -10px;
