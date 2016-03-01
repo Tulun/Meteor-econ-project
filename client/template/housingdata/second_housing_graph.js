@@ -5,69 +5,11 @@ Template.housingData.onRendered(function() {
       console.log(err)
     } else {
 
-    // This function creates a legend.
-      d3.legend = function(g) {
-        g.each(function() {
-          var g= d3.select(this),
-              items = {},
-              svg = d3.select(g.property("nearestViewportElement")),
-              legendPadding = g.attr("data-style-padding") || 5,
-              lb = g.selectAll(".legend-box").data([true]),
-              li = g.selectAll(".legend-items").data([true])
-
-          lb.enter().append("rect").classed("legend-box",true)
-          li.enter().append("g").classed("legend-items",true)
-
-          svg.selectAll("[data-legend]").each(function() {
-              var self = d3.select(this)
-              items[self.attr("data-legend")] = {
-                pos : self.attr("data-legend-pos") || this.getBBox().y,
-                color : self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke") 
-              }
-            })
-
-          items = d3.entries(items).sort(function(a,b) { return a.value.pos-b.value.pos})
-
-          
-          li.selectAll("text")
-              .data(items,function(d) { return d.key})
-              .call(function(d) { d.enter().append("text")})
-              .call(function(d) { d.exit().remove()})
-              .attr("y",function(d,i) { return i+"em"})
-              .attr("x","1em")
-              .text(function(d) { ;return d.key})
-          
-          li.selectAll("circle")
-              .data(items,function(d) { return d.key})
-              .call(function(d) { d.enter().append("circle")})
-              .call(function(d) { d.exit().remove()})
-              .attr("cy",function(d,i) { return i-0.25+"em"})
-              .attr("cx",0)
-              .attr("r","0.4em")
-              .style("fill",function(d) { return d.value.color})  
-          
-          // Reposition and resize the box
-          var lbbox = li[0][0].getBBox()  
-          lb.attr("x",(lbbox.x-legendPadding))
-              .attr("y",(lbbox.y-legendPadding))
-              .attr("height",(lbbox.height+2*legendPadding))
-              .attr("width",(lbbox.width+2*legendPadding))
-        })
-        return g
-      }
-      
-      var data = Data.find({dataSetId: 'hpi'}).fetch();
-
-
       //define constants, height/width
-
-
-
 
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom;
-
 
       //define scales and axes
 
@@ -87,14 +29,13 @@ Template.housingData.onRendered(function() {
 
       var color = d3.scale.category10();
 
-      var line = d3.svg.line()
+      var line2 = d3.svg.line()
         .defined(function(d) { return d.Index > 0; })
         .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })      
 
       //define key function to bind elements to documents
       
-
       //define the SVG element by selecting the SVG via its id attribute
       var svg = d3.select("#second_housing_graph")
         .attr('width', width + margin.left + margin.right)
@@ -113,19 +54,10 @@ Template.housingData.onRendered(function() {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text('Price Index');
-      
+        .text('Price Index');  
 
       //declare a Deps.autorun block
       Deps.autorun(function(){
-
-          //perform a reactive query on the collection to get an array
-          // var dataset1 = Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
-
-
-          // var dataset2 = Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
           // This is entire dataset.
           var dataset = Data.find({dataSetId: 'hpi'}).fetch();
@@ -145,13 +77,11 @@ Template.housingData.onRendered(function() {
           var cities = color.domain().map(function(name) {
             return {
               name: name,
-              values: data.map(function(d) {
+              values: dataset.map(function(d) {
                 return {Time: d.Time, Index: +d[name]};
               })
             };
           });
-
-          // console.log(cities)
 
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
@@ -180,45 +110,21 @@ Template.housingData.onRendered(function() {
             .style("text-anchor", "end")
             .text("Price Index");
 
+          // Rendering the line chart
           var city = svg.selectAll('.city')
             .data(cities)
-
 
           city.enter()
             .append('g')
             .attr('class', 'city');
 
           city.append('path')
-            .attr('class', 'line')
-            .attr('d', function(d) {return line(d.values); })
+            .attr('class', 'line2')
+            .attr('d', function(d) {return line2(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
-          // city.append("text")
-          //   .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-          //   .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
-          //   .attr("x", 3)
-          //   .attr("dy", ".35em")
-          //   .style('fill', function(d) { return color(d.name); })
-          //   .text(function(d) { return d.name; });
-
-            city.exit().remove()
-
-          // var points = svg.selectAll(".point")
-          //   .data(cities[0].values);
-
-          // console.log(points)
-
-          // points.enter();
-
-          // points.append("svg:circle")
-          //  .attr("stroke", "black")
-          //  .attr("fill", function(d, i) { return "black" })
-          //  .attr("cx", function(d) { return x(new Date(d.Time)) })
-          //  .attr("cy", function(d) { return y(d.Index) })
-          //  .attr("r", function(d) { return 3 });
-
-          // points.exit().remove();
+          city.exit().remove()
 
           legend2 = svg.append("g")
             .attr("class","legend")
