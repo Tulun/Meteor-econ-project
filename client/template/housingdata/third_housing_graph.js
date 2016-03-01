@@ -43,7 +43,7 @@ Template.housingData.onRendered(function() {
       var i=0;
       var line3 = d3.svg.line()
         .defined(function(d) {
-          return Number(new Date(d.Time)) >= minDate; 
+          return Number(new Date(d.Time)) >= minX; 
         })
         .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })  
@@ -75,7 +75,7 @@ Template.housingData.onRendered(function() {
       // This function converts the following date structure into a literal number.
       // Min date in this graph represents January 1st, 2008, regardless of what timezone you start in.
 
-      var minDate = dateConversion('Mon Dec 31 2007 23:59:59 GMT+1400 (SGT)');
+      var minX = dateConversion('Mon Dec 31 2007 23:59:59 GMT+1400 (SGT)');
 
       //declare a Deps.autorun block
       Deps.autorun(function(){
@@ -115,15 +115,18 @@ Template.housingData.onRendered(function() {
           });
 
           x.domain(d3.extent(dataset, function(d) {
-            i+=1; 
-            console.log("Current value is: ", i, " ", Number(new Date(d.Time)));
-            // console.log(new Date(d.Time));
-            if (Number(new Date(d.Time)) >= minDate) {
+            if (Number(new Date(d.Time)) >= minX) {
               return new Date(d.Time);
             }
           }));
           y.domain([
-            d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.Index; }); }),
+            d3.min(cities, function(c) {
+              return d3.min(c.values, function(v) {
+                if (Number(new Date(v.Time)) >= minX) {
+                  return v.Index;
+                }
+              });
+            }),
             d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.Index; }); })
           ]);
 
@@ -177,51 +180,31 @@ Template.housingData.onRendered(function() {
           var points = svg.selectAll('.groupOfPoint')
             .data(cities);
 
+            points
+            .enter()
+            .append('g')
+            .attr('class', 'groupOfPoint');
 
-
-
-
-          //   points
-          //   .enter()
-          //   .append('g')
-          //   .attr('class', 'groupOfPoint');
-
-          //   points.selectAll('.point')
-          //     .data(function(d) {
-          //       return d.values;
-          //     })
-          //     .enter()
-          //     .append('circle')
-          //     .attr('cx', function(d) {
-          //       return x(new Date(d.Time))
-          //     })
-          //     .attr('cy', function(d) {
-          //       return y(d.Index);
-          //     })
-          //     .attr('r', dotRadius());
+            points.selectAll('.point')
+              .data(function(d) {
+                return d.values;
+              })
+              .enter()
+              .append('circle')
+              .attr('cx', function(d) {
+                if (Number(new Date(d.Time)) >= minX) {
+                  return x(new Date(d.Time));
+                }
+              })
+              .attr('cy', function(d) {
+                return y(d.Index);
+              })
+              .attr('r', dotRadius());
 
 
          
-          // points.exit().remove();
+          points.exit().remove();
          
-          // points.attr('class', function(d,i) { return 'point point-' + i });
-          
-          // d3.transition(points)
-          //   .attr('cx', function(d) {
-          //     return x(new Date(d.values.forEach(function(c) {
-          //       console.log("cx is: ", c.Time);
-          //       return c.Time;
-          //     })))})
-          //   .attr('cy', function(d) {
-          //     return y(d.values.forEach(function(c) {
-          //       console.log("cy is: ", c.Index)
-          //       return c.Index;
-          //     }))
-          //   })
-          //   .attr('r', dotRadius())
-
-
-
 
           legend3 = svg.append("g")
             .attr("class","legend")

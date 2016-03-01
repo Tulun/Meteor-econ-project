@@ -140,31 +140,9 @@ Template.housingData.onRendered(function() {
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
-          // city.append("text")
-          //   .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-          //   .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
-          //   .attr("x", 3)
-          //   .attr("dy", ".35em")
-          //   .style('fill', function(d) { return color(d.name); })
-          //   .text(function(d) { return d.name; });
-
             city.exit().remove()
 
-          // var points = svg.selectAll(".point")
-          //   .data(cities[0].values);
 
-          // console.log(points)
-
-          // points.enter();
-
-          // points.append("svg:circle")
-          //  .attr("stroke", "black")
-          //  .attr("fill", function(d, i) { return "black" })
-          //  .attr("cx", function(d) { return x(new Date(d.Time)) })
-          //  .attr("cy", function(d) { return y(d.Index) })
-          //  .attr("r", function(d) { return 3 });
-
-          // points.exit().remove();
 
           legend3 = svg.append("g")
             .attr("class","legend")

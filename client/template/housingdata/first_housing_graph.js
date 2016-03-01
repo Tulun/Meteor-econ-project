@@ -155,57 +155,6 @@ Template.housingData.onRendered(function() {
 
             city.exit().remove()
 
-          //The following code adds points to the graph -- I didn't like the look, so I commented it out.
-          // It does work, though.
-
-          // var points = svg.selectAll('.groupOfPoint')
-          //   .data(cities);
-
-
-
-
-
-          //   points
-          //   .enter()
-          //   .append('g')
-          //   .attr('class', 'groupOfPoint');
-
-          //   points.selectAll('.point')
-          //     .data(function(d) {
-          //       return d.values;
-          //     })
-          //     .enter()
-          //     .append('circle')
-          //     .attr('cx', function(d) {
-          //       return x(new Date(d.Time))
-          //     })
-          //     .attr('cy', function(d) {
-          //       return y(d.Index);
-          //     })
-          //     .attr('r', dotRadius());
-
-
-         
-          // points.exit().remove();
-         
-          // points.attr('class', function(d,i) { return 'point point-' + i });
-          
-          // d3.transition(points)
-          //   .attr('cx', function(d) {
-          //     return x(new Date(d.values.forEach(function(c) {
-          //       console.log("cx is: ", c.Time);
-          //       return c.Time;
-          //     })))})
-          //   .attr('cy', function(d) {
-          //     return y(d.values.forEach(function(c) {
-          //       console.log("cy is: ", c.Index)
-          //       return c.Index;
-          //     }))
-          //   })
-          //   .attr('r', dotRadius())
-
-
-
 
           legend1 = svg.append("g")
             .attr("class","legend")
