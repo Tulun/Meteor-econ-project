@@ -5,59 +5,6 @@ Template.housingData.onRendered(function() {
       console.log(err)
     } else {
 
-    // This function creates a legend.
-      d3.legend = function(g) {
-        g.each(function() {
-          var g= d3.select(this),
-              items = {},
-              svg = d3.select(g.property("nearestViewportElement")),
-              legendPadding = g.attr("data-style-padding") || 5,
-              lb = g.selectAll(".legend-box").data([true]),
-              li = g.selectAll(".legend-items").data([true])
-
-          lb.enter().append("rect").classed("legend-box",true)
-          li.enter().append("g").classed("legend-items",true)
-
-          svg.selectAll("[data-legend]").each(function() {
-              var self = d3.select(this)
-              items[self.attr("data-legend")] = {
-                pos : self.attr("data-legend-pos") || this.getBBox().y,
-                color : self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke") 
-              }
-            })
-
-          items = d3.entries(items).sort(function(a,b) { return a.value.pos-b.value.pos})
-
-          
-          li.selectAll("text")
-              .data(items,function(d) { return d.key})
-              .call(function(d) { d.enter().append("text")})
-              .call(function(d) { d.exit().remove()})
-              .attr("y",function(d,i) { return i+"em"})
-              .attr("x","1em")
-              .text(function(d) { ;return d.key})
-          
-          li.selectAll("circle")
-              .data(items,function(d) { return d.key})
-              .call(function(d) { d.enter().append("circle")})
-              .call(function(d) { d.exit().remove()})
-              .attr("cy",function(d,i) { return i-0.25+"em"})
-              .attr("cx",0)
-              .attr("r","0.4em")
-              .style("fill",function(d) { return d.value.color})  
-          
-          // Reposition and resize the box
-          var lbbox = li[0][0].getBBox()  
-          lb.attr("x",(lbbox.x-legendPadding))
-              .attr("y",(lbbox.y-legendPadding))
-              .attr("height",(lbbox.height+2*legendPadding))
-              .attr("width",(lbbox.width+2*legendPadding))
-        })
-        return g
-      }
-      
-      var data = Data.find({dataSetId: 'hpi'}).fetch();
-
 
       //define constants, height/width
 
@@ -127,19 +74,13 @@ Template.housingData.onRendered(function() {
 
       // This function converts the following date structure into a literal number.
       // Min date in this graph represents January 1st, 2008, regardless of what timezone you start in.
-      dateConversion = function(date) {
-        return Number(new Date(date));
-      };
 
       var minDate = dateConversion('Mon Dec 31 2007 23:59:59 GMT+1400 (SGT)');
-
-      
 
       //declare a Deps.autorun block
       Deps.autorun(function(){
 
-      // x0 = x0 || x;
-      // y0 = y0 || y;
+
 
           //perform a reactive query on the collection to get an array
           // var dataset1 = Data.find({dataSetId: 'hpi'},
@@ -150,12 +91,12 @@ Template.housingData.onRendered(function() {
           //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
           // This is entire dataset.
-          var dataset3 = Data.find({dataSetId: 'hpi'}).fetch();
+          var dataset = Data.find({dataSetId: 'hpi'}).fetch();
 
           // This is a subset where there are only positive values to the Edmonton Index.
           // var dataset = Data.find({AB_Edmonton_Index: {$ne: '0'}}).fetch()
 
-          var keys = color.domain(d3.keys(dataset3[0]).filter(function(key) { 
+          var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
             if (key === 'Vancouver_HPI'
              || key === 'Toronto_HPI'
              || key === 'Montreal_HPI') {
@@ -167,13 +108,13 @@ Template.housingData.onRendered(function() {
           var cities = color.domain().map(function(name) {
             return {
               name: name,
-              values: data.map(function(d) {
+              values: dataset.map(function(d) {
                 return {Time: d.Time, Index: +d[name]};
               })
             };
           });
 
-          x.domain(d3.extent(dataset3, function(d) {
+          x.domain(d3.extent(dataset, function(d) {
             i+=1; 
             console.log("Current value is: ", i, " ", Number(new Date(d.Time)));
             // console.log(new Date(d.Time));
