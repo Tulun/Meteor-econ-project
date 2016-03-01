@@ -96,7 +96,7 @@ Template.housingData.onRendered(function() {
       var i=0;
       var line3 = d3.svg.line()
         .defined(function(d) {
-          return Number(new Date(d.Time)) >= 1196467200000; 
+          return Number(new Date(d.Time)) >= minDate; 
         })
         .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })  
@@ -124,6 +124,15 @@ Template.housingData.onRendered(function() {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text('Price Index');
+
+      // This function converts the following date structure into a literal number.
+      // Min date in this graph represents January 1st, 2008, regardless of what timezone you start in.
+      dateConversion = function(date) {
+        return Number(new Date(date));
+      };
+
+      var minDate = dateConversion('Mon Dec 31 2007 23:59:59 GMT+1400 (SGT)');
+
       
 
       //declare a Deps.autorun block
@@ -164,11 +173,11 @@ Template.housingData.onRendered(function() {
             };
           });
 
-          // note: Jan 2008 is equal to 1196467200000.
           x.domain(d3.extent(dataset3, function(d) {
             i+=1; 
             console.log("Current value is: ", i, " ", Number(new Date(d.Time)));
-            if (Number(new Date(d.Time)) >= 1196467200000) {
+            // console.log(new Date(d.Time));
+            if (Number(new Date(d.Time)) >= minDate) {
               return new Date(d.Time);
             }
           }));
@@ -231,28 +240,28 @@ Template.housingData.onRendered(function() {
 
 
 
-            points
-            .enter()
-            .append('g')
-            .attr('class', 'groupOfPoint');
+          //   points
+          //   .enter()
+          //   .append('g')
+          //   .attr('class', 'groupOfPoint');
 
-            points.selectAll('.point')
-              .data(function(d) {
-                return d.values;
-              })
-              .enter()
-              .append('circle')
-              .attr('cx', function(d) {
-                return x(new Date(d.Time))
-              })
-              .attr('cy', function(d) {
-                return y(d.Index);
-              })
-              .attr('r', dotRadius());
+          //   points.selectAll('.point')
+          //     .data(function(d) {
+          //       return d.values;
+          //     })
+          //     .enter()
+          //     .append('circle')
+          //     .attr('cx', function(d) {
+          //       return x(new Date(d.Time))
+          //     })
+          //     .attr('cy', function(d) {
+          //       return y(d.Index);
+          //     })
+          //     .attr('r', dotRadius());
 
 
          
-          points.exit().remove();
+          // points.exit().remove();
          
           // points.attr('class', function(d,i) { return 'point point-' + i });
           
