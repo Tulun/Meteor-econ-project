@@ -193,49 +193,26 @@ Template.housingData.onRendered(function() {
             });
 
           points.selectAll('circle')
-            .on('mouseover', function(d) {
-              console.log("Hello, ", d)
+            .on('mouseover', function(d, i) {
+              console.log("Hello, ", d);
+              d3.select(this)
+                .transition()
+                .delay(500)
+                .style('fill', d3.rgb(255, 0, 0))
+                .style('r', dotRadius()*1.5);
+              // svg.select('circle#circleId-'+i)
+              //   .style('fill', d3.rgb(255,0,0));
             })
             .on('mouseout', function(d) {
               console.log('Goodbye, ', d)
+              d3.select(this)
+                .transition()
+                .delay(1500)
+                .style('fill', 'black')
+                .style('r', dotRadius());
             });
   
           points.exit().remove();
-
-
-
-          console.log(cities)
-
-          // Simple tool tip
-
-          // var focus = svg.append("g")
-          //   .attr("class", "focus")
-          //   .style("display", "none");
-
-          // focus.append("circle")
-          //   .attr("r", 4.5);
-
-          // focus.append("text")
-          //   .attr("x", 9)
-          //   .attr("dy", ".35em");
-
-          // svg.append("rect")
-          //   .attr("class", "overlay")
-          //   .attr("width", width)
-          //   .attr("height", height)
-          //   .on("mouseover", function() { focus.style("display", null); })
-          //   .on("mouseout", function() { focus.style("display", "none"); })
-          // //   .on("mousemove", mousemove);
-
-          // // function mousemove() {
-          // //   var x0 = x.invert(d3.mouse(this)[0]),
-          // //       i = bisectDate(cities, x0, 1),
-          // //       d0 = cities[i - 1],
-          // //       d1 = cities[i],
-          // //       d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-          // //   focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
-          // //   focus.select("text").text(formatCurrency(d.close));
-          // // }
                
           legend3 = svg.append("g")
             .attr("class","legend")
