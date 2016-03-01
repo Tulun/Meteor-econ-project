@@ -119,7 +119,7 @@ Template.housingData.onRendered(function() {
             .attr('class', 'city');
 
           city.append('path')
-            .attr('class', 'line')
+            .attr('class', 'line2')
             .attr('d', function(d) {return line2(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })

@@ -9,9 +9,8 @@ Template.housingData.onRendered(function() {
 
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom,
-        dotRadius = function() { return 1 };
-
+        height = 600 - margin.top - margin.bottom;
+        
       //define scales and axes
 
       var x = d3.time.scale()
@@ -124,7 +123,7 @@ Template.housingData.onRendered(function() {
             .attr('class', 'city');
 
           city.append('path')
-            .attr('class', 'line')
+            .attr('class', 'line1')
             .attr('d', function(d) { return line(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })

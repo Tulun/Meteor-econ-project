@@ -7,10 +7,10 @@ Template.housingData.onRendered(function() {
 
       //define constants, height/width
 
-      var margin = {top: 20, right: 150, bottom: 40, left: 50},
+      var margin = {top: 20, right: 165, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom,
-        dotRadius = function() { return 1 };
+        dotRadius = function() { return 3 };
 
       //define scales and axes
 
@@ -20,7 +20,6 @@ Template.housingData.onRendered(function() {
       var y = d3.scale.linear()
         .range([height, 0]);
 
-      
       var xAxis = d3.svg.axis()
         .scale(x)
         .orient('bottom');
@@ -31,10 +30,6 @@ Template.housingData.onRendered(function() {
 
       var color = d3.scale.category10();
 
-      // 2008 is value / row 210.
-      // 2014 is row 282.
-
-      var i=0;
       var line3 = d3.svg.line()
         .defined(function(d) {
           return Number(new Date(d.Time)) >= minX; 
@@ -42,10 +37,8 @@ Template.housingData.onRendered(function() {
         .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })  
 
-
       //define key function to bind elements to documents
       
-
       //define the SVG element by selecting the SVG via its id attribute
       var svg = d3.select("#third_housing_graph")
         .attr('width', width + margin.left + margin.right)
@@ -146,7 +139,7 @@ Template.housingData.onRendered(function() {
             .attr('class', 'city');
 
           city.append('path')
-            .attr('class', 'line')
+            .attr('class', 'line3')
             .attr('d', function(d) { return line3(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
@@ -182,7 +175,9 @@ Template.housingData.onRendered(function() {
               }
             })
             .attr('cy', function(d) {
-              return y(d.Index);
+              if (Number(new Date(d.Time)) >= minX) {
+                return y(d.Index);
+              }
             })
             .attr('r', dotRadius());
   
