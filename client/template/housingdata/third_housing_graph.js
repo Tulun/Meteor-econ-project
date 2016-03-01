@@ -198,15 +198,23 @@ Template.housingData.onRendered(function() {
             });
 
           points.selectAll('circle')
-            .on('mouseover', function(d, i) {
+            .on('mouseover', function(d) {
+              d3.select(this)
+                .style('r', dotRadius()*1.5)
+                .style('fill', 'red');
               div.transition()    
                 .duration(200)    
                 .style("opacity", .9);    
-              div.html(d.Time + "<br/>"  + d.Index)  
-                .style("left", (d3.event.pageX) + "px")   
-                .style("top", (d3.event.pageY - 28) + "px");
+              div.html("Index: " + d.Index + "<br/>" + "Time: " + d.Time)  
+                .style("left", (d3.event.pageX - 25) + "px")   
+                .style("top", (d3.event.pageY - 80) + "px");
             })
             .on('mouseout', function(d) {
+              d3.select(this)
+                .transition()
+                .duration(1000)
+                .style('r',dotRadius())
+                .style('fill', 'black');
               div.transition()    
                 .duration(500)    
                 .style("opacity", 0); 
