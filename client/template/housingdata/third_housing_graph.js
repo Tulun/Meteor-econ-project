@@ -90,8 +90,14 @@ Template.housingData.onRendered(function() {
 
       var color = d3.scale.category10();
 
-      var line = d3.svg.line()
-        .defined(function(d) { return d.Index > 0; })
+      // 2008 is value / row 210.
+      // 2014 is row 282.
+
+      var i=0;
+      var line3 = d3.svg.line()
+        .defined(function(d) {
+          return Number(new Date(d.Time)) >= 1196467200000; 
+        })
         .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })  
 
@@ -100,7 +106,7 @@ Template.housingData.onRendered(function() {
       
 
       //define the SVG element by selecting the SVG via its id attribute
-      var svg = d3.select("#first_housing_graph")
+      var svg = d3.select("#third_housing_graph")
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
@@ -135,12 +141,12 @@ Template.housingData.onRendered(function() {
           //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
           // This is entire dataset.
-          var dataset = Data.find({dataSetId: 'hpi'}).fetch();
+          var dataset3 = Data.find({dataSetId: 'hpi'}).fetch();
 
           // This is a subset where there are only positive values to the Edmonton Index.
           // var dataset = Data.find({AB_Edmonton_Index: {$ne: '0'}}).fetch()
 
-          var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
+          var keys = color.domain(d3.keys(dataset3[0]).filter(function(key) { 
             if (key === 'Vancouver_HPI'
              || key === 'Toronto_HPI'
              || key === 'Montreal_HPI') {
@@ -158,8 +164,14 @@ Template.housingData.onRendered(function() {
             };
           });
 
-          
-          x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
+          // note: Jan 2008 is equal to 1196467200000.
+          x.domain(d3.extent(dataset3, function(d) {
+            i+=1; 
+            console.log("Current value is: ", i, " ", Number(new Date(d.Time)));
+            if (Number(new Date(d.Time)) >= 1196467200000) {
+              return new Date(d.Time);
+            }
+          }));
           y.domain([
             d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.Index; }); }),
             d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.Index; }); })
@@ -188,10 +200,6 @@ Template.housingData.onRendered(function() {
           var city = svg.selectAll('.city')
             .data(cities)
 
-          console.log("City is: ", city)
-          console.log("Cities is: ", cities)
-
-
 
           city.enter()
             .append('g')
@@ -199,7 +207,7 @@ Template.housingData.onRendered(function() {
 
           city.append('path')
             .attr('class', 'line')
-            .attr('d', function(d) { console.log('d is: ', d); return line(d.values); })
+            .attr('d', function(d) { console.log('d is: ', d); return line3(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
@@ -213,12 +221,14 @@ Template.housingData.onRendered(function() {
 
             city.exit().remove()
 
+          //The following code adds points to the graph -- I didn't like the look, so I commented it out.
+          // It does work, though.
+
           var points = svg.selectAll('.groupOfPoint')
             .data(cities);
 
 
 
-          console.log('Points is :', points)
 
 
             points
@@ -228,13 +238,11 @@ Template.housingData.onRendered(function() {
 
             points.selectAll('.point')
               .data(function(d) {
-                // console.log("data is :", d.values)
                 return d.values;
               })
               .enter()
               .append('circle')
               .attr('cx', function(d) {
-                console.log("cx is: ", x(new Date(d.Time)))
                 return x(new Date(d.Time))
               })
               .attr('cy', function(d) {
@@ -265,14 +273,14 @@ Template.housingData.onRendered(function() {
 
 
 
-          legend1 = svg.append("g")
+          legend3 = svg.append("g")
             .attr("class","legend")
             .attr("transform","translate(50,30)")
             .style("font-size","12px")
             .call(d3.legend)
 
           setTimeout(function() { 
-            legend1
+            legend3
               .style("font-size","20px")
               .attr("data-style-padding",10)
               .call(d3.legend)

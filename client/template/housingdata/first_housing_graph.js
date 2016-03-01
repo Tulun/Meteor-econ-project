@@ -66,7 +66,9 @@ Template.housingData.onRendered(function() {
 
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom;
+        height = 600 - margin.top - margin.bottom,
+        dotRadius = function() { return 1 };
+
 
 
       //define scales and axes
@@ -76,6 +78,7 @@ Template.housingData.onRendered(function() {
 
       var y = d3.scale.linear()
         .range([height, 0]);
+
       
       var xAxis = d3.svg.axis()
         .scale(x)
@@ -90,13 +93,14 @@ Template.housingData.onRendered(function() {
       var line = d3.svg.line()
         .defined(function(d) { return d.Index > 0; })
         .x(function(d) { return x(new Date(d.Time)); })
-        .y(function(d) { return y(d.Index); })      
+        .y(function(d) { return y(d.Index); })  
+
 
       //define key function to bind elements to documents
       
 
       //define the SVG element by selecting the SVG via its id attribute
-      var svg = d3.select("#second_housing_graph")
+      var svg = d3.select("#first_housing_graph")
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
@@ -119,6 +123,9 @@ Template.housingData.onRendered(function() {
       //declare a Deps.autorun block
       Deps.autorun(function(){
 
+      // x0 = x0 || x;
+      // y0 = y0 || y;
+
           //perform a reactive query on the collection to get an array
           // var dataset1 = Data.find({dataSetId: 'hpi'},
           //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
@@ -134,9 +141,9 @@ Template.housingData.onRendered(function() {
           // var dataset = Data.find({AB_Edmonton_Index: {$ne: '0'}}).fetch()
 
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
-            if (key === 'Edmonton_HPI'
-             || key === 'Calgary_HPI'
-             || key === 'Winnipeg_HPI') {
+            if (key === 'Vancouver_HPI'
+             || key === 'Toronto_HPI'
+             || key === 'Montreal_HPI') {
               return key
             }
           }));
@@ -150,8 +157,6 @@ Template.housingData.onRendered(function() {
               })
             };
           });
-
-          // console.log(cities)
 
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
@@ -190,44 +195,80 @@ Template.housingData.onRendered(function() {
 
           city.append('path')
             .attr('class', 'line')
-            .attr('d', function(d) {return line(d.values); })
+            .attr('d', function(d) { return line(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
-          // city.append("text")
-          //   .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-          //   .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
-          //   .attr("x", 3)
-          //   .attr("dy", ".35em")
-          //   .style('fill', function(d) { return color(d.name); })
-          //   .text(function(d) { return d.name; });
+          city.append("text")
+            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+            .attr("transform", function(d) { return "translate(" + x(new Date(d.value.Time)) + "," + y(d.value.Index) + ")"; })
+            .attr("x", 3)
+            .attr("dy", ".35em")
+            .style('fill', function(d) { return color(d.name); })
+            .text(function(d) { return d.name; });
 
             city.exit().remove()
 
-          // var points = svg.selectAll(".point")
-          //   .data(cities[0].values);
+          //The following code adds points to the graph -- I didn't like the look, so I commented it out.
+          // It does work, though.
 
-          // console.log(points)
+          // var points = svg.selectAll('.groupOfPoint')
+          //   .data(cities);
 
-          // points.enter();
 
-          // points.append("svg:circle")
-          //  .attr("stroke", "black")
-          //  .attr("fill", function(d, i) { return "black" })
-          //  .attr("cx", function(d) { return x(new Date(d.Time)) })
-          //  .attr("cy", function(d) { return y(d.Index) })
-          //  .attr("r", function(d) { return 3 });
 
+
+
+          //   points
+          //   .enter()
+          //   .append('g')
+          //   .attr('class', 'groupOfPoint');
+
+          //   points.selectAll('.point')
+          //     .data(function(d) {
+          //       return d.values;
+          //     })
+          //     .enter()
+          //     .append('circle')
+          //     .attr('cx', function(d) {
+          //       return x(new Date(d.Time))
+          //     })
+          //     .attr('cy', function(d) {
+          //       return y(d.Index);
+          //     })
+          //     .attr('r', dotRadius());
+
+
+         
           // points.exit().remove();
+         
+          // points.attr('class', function(d,i) { return 'point point-' + i });
+          
+          // d3.transition(points)
+          //   .attr('cx', function(d) {
+          //     return x(new Date(d.values.forEach(function(c) {
+          //       console.log("cx is: ", c.Time);
+          //       return c.Time;
+          //     })))})
+          //   .attr('cy', function(d) {
+          //     return y(d.values.forEach(function(c) {
+          //       console.log("cy is: ", c.Index)
+          //       return c.Index;
+          //     }))
+          //   })
+          //   .attr('r', dotRadius())
 
-          legend2 = svg.append("g")
+
+
+
+          legend1 = svg.append("g")
             .attr("class","legend")
             .attr("transform","translate(50,30)")
             .style("font-size","12px")
             .call(d3.legend)
 
           setTimeout(function() { 
-            legend2
+            legend1
               .style("font-size","20px")
               .attr("data-style-padding",10)
               .call(d3.legend)
