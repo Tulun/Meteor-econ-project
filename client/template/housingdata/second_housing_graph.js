@@ -7,13 +7,9 @@ Template.housingData.onRendered(function() {
 
       //define constants, height/width
 
-
-
-
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom;
-
 
       //define scales and axes
 
@@ -40,7 +36,6 @@ Template.housingData.onRendered(function() {
 
       //define key function to bind elements to documents
       
-
       //define the SVG element by selecting the SVG via its id attribute
       var svg = d3.select("#second_housing_graph")
         .attr('width', width + margin.left + margin.right)
@@ -59,19 +54,10 @@ Template.housingData.onRendered(function() {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text('Price Index');
-      
+        .text('Price Index');  
 
       //declare a Deps.autorun block
       Deps.autorun(function(){
-
-          //perform a reactive query on the collection to get an array
-          // var dataset1 = Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
-
-
-          // var dataset2 = Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
           // This is entire dataset.
           var dataset = Data.find({dataSetId: 'hpi'}).fetch();
@@ -96,8 +82,6 @@ Template.housingData.onRendered(function() {
               })
             };
           });
-
-          // console.log(cities)
 
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
@@ -126,9 +110,9 @@ Template.housingData.onRendered(function() {
             .style("text-anchor", "end")
             .text("Price Index");
 
+          // Rendering the line chart
           var city = svg.selectAll('.city')
             .data(cities)
-
 
           city.enter()
             .append('g')
@@ -140,18 +124,16 @@ Template.housingData.onRendered(function() {
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
-            city.exit().remove()
+          city.exit().remove()
 
-
-
-          legend3 = svg.append("g")
+          legend2 = svg.append("g")
             .attr("class","legend")
             .attr("transform","translate(50,30)")
             .style("font-size","12px")
             .call(d3.legend)
 
           setTimeout(function() { 
-            legend3
+            legend2
               .style("font-size","20px")
               .attr("data-style-padding",10)
               .call(d3.legend)

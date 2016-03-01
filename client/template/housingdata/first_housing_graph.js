@@ -7,15 +7,10 @@ Template.housingData.onRendered(function() {
 
       //define constants, height/width
 
-
-
-
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom,
         dotRadius = function() { return 1 };
-
-
 
       //define scales and axes
 
@@ -41,10 +36,8 @@ Template.housingData.onRendered(function() {
         .x(function(d) { return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })  
 
-
       //define key function to bind elements to documents
       
-
       //define the SVG element by selecting the SVG via its id attribute
       var svg = d3.select("#first_housing_graph")
         .attr('width', width + margin.left + margin.right)
@@ -65,26 +58,17 @@ Template.housingData.onRendered(function() {
         .style("text-anchor", "end")
         .text('Price Index');
       
-
       //declare a Deps.autorun block
       Deps.autorun(function(){
-
-      // x0 = x0 || x;
-      // y0 = y0 || y;
 
           //perform a reactive query on the collection to get an array
           // var dataset1 = Data.find({dataSetId: 'hpi'},
           //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
 
-
           // var dataset2 = Data.find({dataSetId: 'hpi'},
           //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
 
-          // This is entire dataset.
           var dataset = Data.find({dataSetId: 'hpi'}).fetch();
-
-          // This is a subset where there are only positive values to the Edmonton Index.
-          // var dataset = Data.find({AB_Edmonton_Index: {$ne: '0'}}).fetch()
 
           var keys = color.domain(d3.keys(dataset[0]).filter(function(key) { 
             if (key === 'Vancouver_HPI'
@@ -153,8 +137,7 @@ Template.housingData.onRendered(function() {
             .style('fill', function(d) { return color(d.name); })
             .text(function(d) { return d.name; });
 
-            city.exit().remove()
-
+          city.exit().remove()
 
           legend1 = svg.append("g")
             .attr("class","legend")

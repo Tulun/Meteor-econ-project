@@ -57,7 +57,7 @@ Template.housingData.onRendered(function() {
               .attr("width",(lbbox.width+2*legendPadding))
         })
         return g
-      }
+      };
       // This function converts a date in the following format: Mon Dec 31 2007 23:59:59 GMT+1400 (SGT)'
       // OR '2008-01-01' (etc) to for conditional statements. I use the above format to cover the timezone differences.
       // Essentially, in the above example, I am filtering for the min date of Jan 1st, 2008, using the 

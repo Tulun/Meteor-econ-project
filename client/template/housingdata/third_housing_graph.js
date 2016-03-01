@@ -5,18 +5,12 @@ Template.housingData.onRendered(function() {
       console.log(err)
     } else {
 
-
       //define constants, height/width
-
-
-
 
       var margin = {top: 20, right: 150, bottom: 40, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom,
         dotRadius = function() { return 1 };
-
-
 
       //define scales and axes
 
@@ -80,16 +74,6 @@ Template.housingData.onRendered(function() {
       //declare a Deps.autorun block
       Deps.autorun(function(){
 
-
-
-          //perform a reactive query on the collection to get an array
-          // var dataset1 = Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Vancouver_Index: 1, Time: 1}}).fetch();
-
-
-          // var dataset2 = Data.find({dataSetId: 'hpi'},
-          //  {fields: {BC_Victoria_Index: 1, Time: 1}}).fetch();
-
           // This is entire dataset.
           var dataset = Data.find({dataSetId: 'hpi'}).fetch();
 
@@ -104,7 +88,6 @@ Template.housingData.onRendered(function() {
             }
           }));
 
-          //
           var cities = color.domain().map(function(name) {
             return {
               name: name,
@@ -127,7 +110,11 @@ Template.housingData.onRendered(function() {
                 }
               });
             }),
-            d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.Index; }); })
+            d3.max(cities, function(c) {
+              return d3.max(c.values, function(v) {
+                return v.Index;
+              });
+            })
           ]);
 
           svg.append("g")
@@ -135,8 +122,8 @@ Template.housingData.onRendered(function() {
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis)
             .append('text')
-            .attr('x', 6)
-            .attr('y', 18)
+            .attr('x', 800)
+            .attr('y', 24)
             .style('text-anchor', 'middle')
             .text('Year');
 
@@ -150,9 +137,9 @@ Template.housingData.onRendered(function() {
             .style("text-anchor", "end")
             .text("Price Index");
 
+          // Rendering the line graph.
           var city = svg.selectAll('.city')
             .data(cities)
-
 
           city.enter()
             .append('g')
@@ -160,7 +147,7 @@ Template.housingData.onRendered(function() {
 
           city.append('path')
             .attr('class', 'line')
-            .attr('d', function(d) { console.log('d is: ', d); return line3(d.values); })
+            .attr('d', function(d) { return line3(d.values); })
             .attr("data-legend",function(d) { return d.name})
             .style("stroke", function(d) { return color(d.name); })
 
@@ -172,40 +159,35 @@ Template.housingData.onRendered(function() {
             .style('fill', function(d) { return color(d.name); })
             .text(function(d) { return d.name; });
 
-            city.exit().remove()
+          city.exit().remove()
 
-          //The following code adds points to the graph -- I didn't like the look, so I commented it out.
-          // It does work, though.
-
+          // Rendering the points on the graph.
           var points = svg.selectAll('.groupOfPoint')
             .data(cities);
 
-            points
+          points
             .enter()
             .append('g')
             .attr('class', 'groupOfPoint');
 
-            points.selectAll('.point')
-              .data(function(d) {
-                return d.values;
-              })
-              .enter()
-              .append('circle')
-              .attr('cx', function(d) {
-                if (Number(new Date(d.Time)) >= minX) {
-                  return x(new Date(d.Time));
-                }
-              })
-              .attr('cy', function(d) {
-                return y(d.Index);
-              })
-              .attr('r', dotRadius());
-
-
-         
+          points.selectAll('.point')
+            .data(function(d) {
+              return d.values;
+            })
+            .enter()
+            .append('circle')
+            .attr('cx', function(d) {
+              if (Number(new Date(d.Time)) >= minX) {
+                return x(new Date(d.Time));
+              }
+            })
+            .attr('cy', function(d) {
+              return y(d.Index);
+            })
+            .attr('r', dotRadius());
+  
           points.exit().remove();
          
-
           legend3 = svg.append("g")
             .attr("class","legend")
             .attr("transform","translate(50,30)")
