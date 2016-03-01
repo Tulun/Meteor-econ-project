@@ -13,6 +13,11 @@ Template.housingData.onRendered(function() {
         bisectDate = d3.bisector(function(d) { return d.date; }).left,
         dotRadius = function() { return 3 };
 
+      // Define the div for the tooltip
+      var div = d3.select("body").append("div") 
+        .attr("class", "tooltip")       
+        .style("opacity", 0);
+
       //define scales and axes
 
       var x = d3.time.scale()
@@ -194,22 +199,17 @@ Template.housingData.onRendered(function() {
 
           points.selectAll('circle')
             .on('mouseover', function(d, i) {
-              console.log("Hello, ", d);
-              d3.select(this)
-                .transition()
-                .delay(500)
-                .style('fill', d3.rgb(255, 0, 0))
-                .style('r', dotRadius()*1.5);
-              // svg.select('circle#circleId-'+i)
-              //   .style('fill', d3.rgb(255,0,0));
+              div.transition()    
+                .duration(200)    
+                .style("opacity", .9);    
+              div.html(d.Time + "<br/>"  + d.Index)  
+                .style("left", (d3.event.pageX) + "px")   
+                .style("top", (d3.event.pageY - 28) + "px");
             })
             .on('mouseout', function(d) {
-              console.log('Goodbye, ', d)
-              d3.select(this)
-                .transition()
-                .delay(1500)
-                .style('fill', 'black')
-                .style('r', dotRadius());
+              div.transition()    
+                .duration(500)    
+                .style("opacity", 0); 
             });
   
           points.exit().remove();
