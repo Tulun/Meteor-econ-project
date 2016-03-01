@@ -23,7 +23,8 @@ Template.housingData.onRendered(function() {
 
       var xAxis = d3.svg.axis()
         .scale(x)
-        .orient('bottom');
+        .orient('bottom')
+        .ticks(5);
 
       var yAxis = d3.svg.axis()
         .scale(y)
@@ -63,7 +64,7 @@ Template.housingData.onRendered(function() {
       // This function converts the following date structure into a literal number.
       // Min date in this graph represents January 1st, 2008, regardless of what timezone you start in.
 
-      var minX = dateConversion('Mon Dec 31 2007 23:59:59 GMT+1400 (SGT)');
+      var minX = dateConversion('Mon Dec 31 2011 23:59:59 GMT+1400 (SGT)');
 
       //declare a Deps.autorun block
       Deps.autorun(function(){
@@ -171,7 +172,9 @@ Template.housingData.onRendered(function() {
             .enter()
             .append('circle')
             .attr('circleId', function(d, i) {
-              return 'circleId-'+i;
+              if (Number(new Date(d.Time)) >= minX) {
+                return 'circleId-'+i;
+              }
             })
             .attr('cx', function(d) {
               if (Number(new Date(d.Time)) >= minX) {
