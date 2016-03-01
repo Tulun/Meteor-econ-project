@@ -12,4 +12,4 @@ The upload template I used follows this blog post:
 
 https://themeteorchef.com/snippets/importing-csvs/#tmc-defining-an-upload-template
 
-I got the data for Democrat/Republican demographics from New York Times Entrance/Exit polls (and may therefore reflect some inaccuracies).
+I got the data for Democrat/Republican demographics from New York Times Entrance/Exit polls (and may therefore reflect some inaccuracies), with some stats spliced from other news sources (NBC, etc).
