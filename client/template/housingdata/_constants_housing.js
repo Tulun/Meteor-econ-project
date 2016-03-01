@@ -8,7 +8,6 @@ Template.housingData.onRendered(function() {
     if (err) {
       console.log(err)
     } else {
-
       d3.legend = function(g) {
         g.each(function() {
           var g= d3.select(this),
@@ -22,16 +21,15 @@ Template.housingData.onRendered(function() {
           li.enter().append("g").classed("legend-items",true)
 
           svg.selectAll("[data-legend]").each(function() {
-              var self = d3.select(this)
-              items[self.attr("data-legend")] = {
-                pos : self.attr("data-legend-pos") || this.getBBox().y,
-                color : self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke") 
-              }
-            })
+            var self = d3.select(this)
+            items[self.attr("data-legend")] = {
+              pos : self.attr("data-legend-pos") || this.getBBox().y,
+              color : self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke") 
+            }
+          })
 
           items = d3.entries(items).sort(function(a,b) { return a.value.pos-b.value.pos})
-
-          
+    
           li.selectAll("text")
               .data(items,function(d) { return d.key})
               .call(function(d) { d.enter().append("text")})
