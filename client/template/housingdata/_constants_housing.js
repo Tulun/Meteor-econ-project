@@ -65,7 +65,6 @@ Template.housingData.onRendered(function() {
       };
       formatTime = function(date) {
         var formatter = d3.time.format("%Y-%m-%d").parse;
-        console.log(formatter(date));
         return formatter(date);
       }
 
