@@ -1,42 +1,51 @@
 Template.polarClock.onRendered(function() {
   
   var width = 960,
-      height = 800,
-      radius = Math.min(width, height) / 1.9,
-      spacing = .09;
+    height = 800,
+    radius = Math.min(width, height) / 1.9,
+    spacing = .09;
 
   var formatSecond = d3.time.format("%-S seconds"),
-      formatMinute = d3.time.format("%-M minutes"),
-      formatHour = d3.time.format("%-H hours"),
-      formatDay = d3.time.format("%A"),
-      formatDate = function(d) { d = d.getDate(); switch (10 <= d && d <= 19 ? 10 : d % 10) { case 1: d += "st"; break; case 2: d += "nd"; break; case 3: d += "rd"; break; default: d += "th"; break; } return d; },
-      formatMonth = d3.time.format("%B");
+    formatMinute = d3.time.format("%-M minutes"),
+    formatHour = d3.time.format("%-H hours"),
+    formatDay = d3.time.format("%A"),
+    formatDate = function(d) {
+      d = d.getDate();
+      switch (10 <= d && d <= 19 ? 10 : d % 10) {
+        case 1: d += "st"; break;
+        case 2: d += "nd"; break;
+        case 3: d += "rd"; break;
+        default: d += "th"; break;
+      }
+      return d;
+    },
+    formatMonth = d3.time.format("%B");
 
   var color = d3.scale.linear()
-      .range(["hsl(-180,60%,50%)", "hsl(180,60%,50%)"])
-      .interpolate(function(a, b) { var i = d3.interpolateString(a, b); return function(t) { return d3.hsl(i(t)); }; });
+    .range(["hsl(-180,60%,50%)", "hsl(180,60%,50%)"])
+    .interpolate(function(a, b) { var i = d3.interpolateString(a, b); return function(t) { return d3.hsl(i(t)); }; });
 
   var arcBody = d3.svg.arc()
-      .startAngle(0)
-      .endAngle(function(d) { return d.value * 2 * Math.PI; })
-      .innerRadius(function(d) { return d.index * radius; })
-      .outerRadius(function(d) { return (d.index + spacing) * radius; })
-      // .cornerRadius(6);
+    .startAngle(0)
+    .endAngle(function(d) { return d.value * 2 * Math.PI; })
+    .innerRadius(function(d) { return d.index * radius; })
+    .outerRadius(function(d) { return (d.index + spacing) * radius; })
+    // .cornerRadius(6);
 
   var arcCenter = d3.svg.arc()
-      .startAngle(0)
-      .endAngle(function(d) { return d.value * 2 * Math.PI; })
-      .innerRadius(function(d) { return (d.index + spacing / 2) * radius; })
-      .outerRadius(function(d) { return (d.index + spacing / 2) * radius; });
+    .startAngle(0)
+    .endAngle(function(d) { return d.value * 2 * Math.PI; })
+    .innerRadius(function(d) { return (d.index + spacing / 2) * radius; })
+    .outerRadius(function(d) { return (d.index + spacing / 2) * radius; });
 
   var svg = d3.select("#polar_clock_two")
-      .attr("width", width)
-      .attr("height", height)
+    .attr("width", width)
+    .attr("height", height)
     .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
   var field = svg.selectAll("g")
-      .data(fields)
+    .data(fields)
     .enter().append("g");
 
   field.append("path")
@@ -77,14 +86,14 @@ Template.polarClock.onRendered(function() {
     var field = d3.select(this).transition();
 
     field.select(".arc-body")
-        .attrTween("d", arcTween(arcBody))
-        .style("fill", function(d) { return color(d.value); });
+      .attrTween("d", arcTween(arcBody))
+      .style("fill", function(d) { return color(d.value); });
 
     field.select(".arc-center")
-        .attrTween("d", arcTween(arcCenter));
+      .attrTween("d", arcTween(arcCenter));
 
     field.select(".arc-text")
-        .text(function(d) { return d.text; });
+      .text(function(d) { return d.text; });
   }
 
   function arcTween(arc) {
