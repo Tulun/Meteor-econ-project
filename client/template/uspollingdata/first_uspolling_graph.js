@@ -55,7 +55,9 @@ Template.usPollingData.onRendered(function() {
         node.append("text")
           .attr("dy", ".3em")
           .style("text-anchor", "middle")
-          .text(function(d) {console.log('text d is: ', d); return d.packageName});
+          .text(function(d) { return d.packageName.substring(0, d.r / 3) });
+                // .text(function(d) { return d.className.substring(0, d.r / 3); });
+
       });
     }
   });
