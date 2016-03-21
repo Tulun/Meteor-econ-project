@@ -21,8 +21,8 @@ Template.usPollingData.onRendered(function() {
         console.log('process data start is: ', data);
         var newDataSet = [];
         data.forEach(function(prop){ 
-          // console.log(prop);
-          return newDataSet.push({packageName: prop.Democratic_Candidate + " " + prop.dataSetId, className: prop.Democratic_Candidate.toLowerCase(), size: prop.Total_Votes});
+          console.log('this is prop: ', Number(prop.Total_Votes.split(',').join('')));
+          return newDataSet.push({packageName: prop.Democratic_Candidate + " " + prop.dataSetId, className: prop.Democratic_Candidate.toLowerCase(), size: Number(prop.Total_Votes.split(',').join(''))});
         })
         console.log("This is newDataSet: ", newDataSet);
         return {children: newDataSet};

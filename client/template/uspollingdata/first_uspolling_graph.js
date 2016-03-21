@@ -18,7 +18,7 @@ Template.usPollingData.onRendered(function() {
 
       var diameter = 960,
         format = d3.format(",d"),
-        color = d3.scale.category20c();
+        color = d3.scale.category10();
 
       var svg = d3.select("#first_uspolling_graph")
         .append("svg")
@@ -46,12 +46,17 @@ Template.usPollingData.onRendered(function() {
           .attr("transform", function(d) { console.log("This is in transform :", d); return "translate(" + d.x + "," + d.y + ")"; });
 
         node.append("title")
-          .text(function(d) {console.log(d.size); return d.className + ": " + format(d.value); });
+          .text(function(d) {console.log(d.size); return d.packageName + ": " + format(d.value); });
 
         node.append("circle")
             .attr("r", function(d) { return d.r; })
             .style("fill", function(d) { return color(d.className); });
-            });
+
+        node.append("text")
+          .attr("dy", ".3em")
+          .style("text-anchor", "middle")
+          .text(function(d) {console.log('text d is: ', d); return d.packageName});
+      });
     }
   });
 });
