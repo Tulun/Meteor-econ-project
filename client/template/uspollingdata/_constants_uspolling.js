@@ -18,11 +18,11 @@ Template.usPollingData.onRendered(function() {
       // }
 
       processData = function(data) {
-        // console.log(data);
+        console.log('process data start is: ', data);
         var newDataSet = [];
         data.forEach(function(prop){ 
           // console.log(prop);
-          return newDataSet.push({name: prop.Democratic_Candidate + " " + prop.dataSetId, className: prop.Democratic_Candidate.toLowerCase(), size: prop.Total_Votes});
+          return newDataSet.push({packageName: prop.Democratic_Candidate + " " + prop.dataSetId, className: prop.Democratic_Candidate.toLowerCase(), size: prop.Total_Votes});
         })
         console.log("This is newDataSet: ", newDataSet);
         return {children: newDataSet};

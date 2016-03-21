@@ -30,28 +30,27 @@ Template.usPollingData.onRendered(function() {
         .sort(null)
         .size([diameter, diameter])
         .value(function(d) {
-          console.log("This is in bubble : ", d.size); 
-          return d.size
+          console.log("This is in bubble : ", d.size);
+          return Number(d.size);
         })
         .padding(1.5);
 
       Deps.autorun(function(){
         var node = svg.selectAll(".node")
-          .data(bubble.nodes(processData(data)))
-          .filter(function(d) { console.log('This is d.children :', d.children); return !d.children; })
+          .data(bubble.nodes(processData(data)).filter(function(d) { return !d.children;}))
 
-        console.log("this is node: ", node)
+
         node.enter()
-          .append("circle")
+          .append('g')
           .attr("class", "node")
           .attr("transform", function(d) { console.log("This is in transform :", d); return "translate(" + d.x + "," + d.y + ")"; });
 
         node.append("title")
-          .text(function(d) { return d.className + ": " + format(d.value); });
+          .text(function(d) {console.log(d.size); return d.className + ": " + format(d.value); });
 
         node.append("circle")
             .attr("r", function(d) { return d.r; })
-            .style("fill", function(d) { return color(d.name); });
+            .style("fill", function(d) { return color(d.className); });
             });
     }
   });

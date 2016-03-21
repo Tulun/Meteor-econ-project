@@ -32,7 +32,7 @@ Template.housingData.onRendered(function() {
 
       var line = d3.svg.line()
         .defined(function(d) { return d.Index > 0; })
-        .x(function(d) { return x(new Date(d.Time)); })
+        .x(function(d) { console.log('d is :' , d, ' new Date x is: ', x(new Date(d.Time))); return x(new Date(d.Time)); })
         .y(function(d) { return y(d.Index); })  
 
       //define key function to bind elements to documents
@@ -86,6 +86,8 @@ Template.housingData.onRendered(function() {
               })
             };
           });
+
+          console.log(cities)
 
           
           x.domain(d3.extent(dataset, function(d) { return new Date(d.Time); }));
