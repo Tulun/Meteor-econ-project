@@ -27,3 +27,4 @@ check
 twbs:bootstrap
 iron:router
 sacha:spin
+d3js:d3

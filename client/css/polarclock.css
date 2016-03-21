@@ -1,0 +1,13 @@
+.arc-text {
+  font: 16px sans-serif;
+}
+
+.arc-center {
+  fill: none;
+}
+
+#polar_clock_two {
+  background: #222;
+  margin: auto;
+  width: 960px;
+}
